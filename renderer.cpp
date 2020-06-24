@@ -1,17 +1,10 @@
 #include "renderer.hpp"
 
-
-void Renderer::add_sprite(Sprite sprite){
-    sprites[num_of_sprites++] = sprite;
+Shape::Shape(SDL_Renderer &sdl_renderer_){
+    sdl_renderer = &sdl_renderer_;
 }
-
-void Renderer::draw_sprites(){
-    for (int i = 0; i < num_of_sprites; i++)
-        printf("%f\n", sprites[i].pos.x);
-}
-
-void Renderer::draw_circle(SDL_Renderer * renderer, float x, float y, float radius){
-
+void Shape::draw(){
+    throw;  // Not implemented
 }
 
 bool Renderer::init_window(){

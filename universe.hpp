@@ -1,14 +1,14 @@
 #ifndef UNIVERSE_HPP
 #define UNIVERSE_HPP
 
-#include "photon.hpp"
+#include "matter.hpp"
 
 class Universe{
 
     private:
-    static const int max_photons = 100;
-    Photon photons [max_photons];
-    int num_of_photons = 0;
+    static const int max_matter = 100;
+    Matter matter [max_matter];
+    int num_of_matter = 0;
 
 
 };

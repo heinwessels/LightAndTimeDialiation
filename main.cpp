@@ -9,4 +9,6 @@ int main( int argc, char* args[] )
     Renderer renderer;
 
     renderer.init_window();
+
+    Photon photon;
 }
