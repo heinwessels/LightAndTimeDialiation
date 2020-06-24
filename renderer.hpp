@@ -19,6 +19,8 @@ public:
 };
 class Rectangle : public Shape{
 public:
+    Rectangle(SDL_Renderer &sdl_renderer_,
+            float x1_, float x2_, float y1_, float y2_);
     float x1, x2, y1, y2;
     void draw();
 };

@@ -11,4 +11,5 @@ int main( int argc, char* args[] )
     renderer.init_window();
 
     Photon photon;
+    // Rectangle
 }

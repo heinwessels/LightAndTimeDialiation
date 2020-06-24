@@ -4,6 +4,8 @@
 
 #include "matter.hpp"
 
+class Photon : public Matter{
 
+};
 
 #endif

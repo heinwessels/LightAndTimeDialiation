@@ -25,8 +25,4 @@ class Matter{
     // void step(Universe &universe);
 };
 
-class Photon : public Matter{
-
-};
-
 #endif
