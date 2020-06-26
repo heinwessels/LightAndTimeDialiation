@@ -3,13 +3,16 @@
 
 #include "renderer.hpp"
 #include "photon.hpp"
+#include "universe.hpp"
+#include "matter.hpp"
 
 int main( int argc, char* args[] )
 {
-    Renderer renderer;
+    Matter::Rectangle rectangle (0.0, 0.0);
+    Matter::Circle circle (0.0);
 
-    renderer.init_window();
-
-    Photon photon;
-    // Rectangle
+    rectangle.collision_with(rectangle);
+    rectangle.collision_with(circle);
+    circle.collision_with(rectangle);
+    circle.collision_with(circle);
 }

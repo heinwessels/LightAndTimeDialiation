@@ -9,29 +9,9 @@
 
 #include "vec3.hpp"
 
-class Shape{
-private:
-    SDL_Renderer *sdl_renderer;
-public:
-    Shape(SDL_Renderer &sdl_renderer_);
-    int rgba [4];
-    virtual void draw();
-};
-class Rectangle : public Shape{
-public:
-    Rectangle(SDL_Renderer &sdl_renderer_,
-            float x1_, float x2_, float y1_, float y2_);
-    float x1, x2, y1, y2;
-    void draw();
-};
-class Circle : public Shape{
-public:
-    void draw();
-};
 
 class Graphic{
-public:
-    Shape *shapes;
+
 };
 
 
@@ -46,8 +26,6 @@ class Renderer{
     SDL_Renderer *sdl_renderer;
     TTF_Font *gfont;
     const char * gfont_path = "fonts/PixelSplitter-Bold.ttf";
-
-
 
     public:
 

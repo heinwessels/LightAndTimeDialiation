@@ -1,18 +1,5 @@
 #include "renderer.hpp"
 
-Shape::Shape(SDL_Renderer &sdl_renderer_){
-    sdl_renderer = &sdl_renderer_;
-}
-void Shape::draw(){
-    throw;  // Not implemented
-}
-Rectangle::Rectangle(SDL_Renderer &sdl_renderer_, float x1_, float x2_, float y1_, float y2_)
-    : Shape(sdl_renderer_), x1(x1_), x2(x2_), y1(y1_), y2(y2_)
-{
-}
-void Rectangle::draw(){
-    throw;  // Not implemented
-}
 
 
 bool Renderer::init_window(){
