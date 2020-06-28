@@ -11,3 +11,5 @@ This project will simulate emitted light being bent by space-time, hopefully als
 - **Polymorhism:** All objects in universe as stored as `Matter`, but could be `Body`, `Rocket` or `Photon` which has `Matter` as a base class.
 - **Composition:**
   - Collisions of `Matter` is handled by the internal `Shape` variable, where `Shape` can be either `Rectangle` or `Circle` (with `Shape` as base class). Then calling e.g. `Shape::Rectangle.collision_with(?)` directs to the correct method in `Shape` to handle the collision.
+- **Factory Pattern:**
+  - Handle of shape collisions in Pyshics engine (TODO)

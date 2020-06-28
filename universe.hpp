@@ -2,6 +2,7 @@
 #define UNIVERSE_HPP
 
 #include "matter.hpp"
+#include "renderer.hpp"
 
 class Universe{
 

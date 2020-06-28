@@ -3,10 +3,8 @@
 
 #include "vec3.hpp"
 #include "renderer.hpp"
-// #include "universe.hpp"
 
 class Matter{
-
 public:
 
     class Shape{

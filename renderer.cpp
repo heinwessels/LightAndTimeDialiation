@@ -36,6 +36,16 @@ void Renderer::draw_filled_circle(SDL_Renderer *renderer, float x, float y, floa
     Renderer::draw_filled_rectangle(renderer, x, y, radius*2, radius*2, colour);
 }
 
+std::vector<SDL_Event> Renderer::poll_events(){
+    std::vector<SDL_Event> events;
+    SDL_GetKeyboardState(NULL);
+    SDL_Event event;
+    while(SDL_PollEvent(&event)){
+        events.push_back(event);
+    }
+    return events;
+}
+
 bool Renderer::init_window(){
     bool success = true;
 

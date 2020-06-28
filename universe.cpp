@@ -16,7 +16,7 @@ void Universe::draw(){
     // First draw all matter
     for(int i = 0; i < num_of_matter; i++){
 
-        // If graphic is empty (i.e. <Renderer::Graphic>), <draw()> will do nothing.
+        // If graphic is empty (i.e. a <Renderer::Graphic> type), <draw()> will do nothing.
         matter[i].graphic->draw(
             renderer->get_renderer(),
             matter[i].pos.x,
