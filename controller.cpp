@@ -10,8 +10,7 @@ void Controller::init(){
     Matter a (
         Vec3<float> (50, 50, 0),
         Vec3<float> (0),
-        0,
-        Matter::Circle(50)
+        0
     );
     Renderer::Rectangle *gr_rect = new Renderer::Rectangle(20, 40); // This is a memory leak
     a.add_graphic(gr_rect);
@@ -20,8 +19,7 @@ void Controller::init(){
     Matter b (
         Vec3<float> (300, 300, 0),
         Vec3<float> (0),
-        0,
-        Matter::Rectangle(100, 50)
+        0
     );
     Renderer::Circle *gr_circ = new Renderer::Circle(20);   // This is a memory leak
     b.add_graphic(
