@@ -21,6 +21,8 @@ class Universe{
     public:
     Universe(Renderer &r);
 
+    void add_matter(Matter matter);
+
     void draw();
 
 };

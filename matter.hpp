@@ -7,19 +7,12 @@
 
 class Matter{
 
-    private:
-    Graphic graphic;
+public:
 
-    public:
-
-    class Rectangle;
-    class Circle;
     class Shape{
-    public:
-        bool collision_between_rectangle_and_rectangle(const Rectangle &rectangle1, const Rectangle &rectangle2);
-        bool collision_between_rectangle_and_circle(const Rectangle &rectangle, const Circle &circle);
-        bool collision_between_circle_and_circle(const Circle &circle1, const Circle &circle2);
     };
+    // TODO Derived classes should not know about each other
+    class Circle;
     class Rectangle: public Shape{
     public:
         float width, height;
@@ -34,19 +27,27 @@ class Matter{
         virtual bool collision_with(const Rectangle &rectangle);
         virtual bool collision_with(const Circle &circle);
     };
+    class ShapeCollisions{
+    public:
+        static bool collision_between_rectangle_and_rectangle(const Rectangle &rectangle1, const Rectangle &rectangle2);
+        static bool collision_between_rectangle_and_circle(const Rectangle &rectangle, const Circle &circle);
+        static bool collision_between_circle_and_circle(const Circle &circle1, const Circle &circle2);
+    };
 
 
     Vec3<float> pos;
     Vec3<float> speed;
     float weight;
+    Shape shape;
     bool ignore_forces = false;
+
+    Renderer::Graphic *graphic;
 
     Matter(){};
     ~Matter(){};
 
-    Matter(Vec3<float> pos, Vec3<float> speed, float weight);
-
-    void add_graphic(Graphic graphic);
+    Matter(Vec3<float> p, Vec3<float> sp, float w, Shape sh) : pos(p), speed(sp), weight(w), shape(sh) {};
+    void add_graphic(Renderer::Graphic *graphic){this->graphic = graphic;};
 
     // void step(Universe &universe);
 };

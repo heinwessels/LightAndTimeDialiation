@@ -1,6 +1,40 @@
 #include "renderer.hpp"
 
+void Renderer::Rectangle::draw(SDL_Renderer *renderer, int x, int y, float scaling){
+    draw_filled_rectangle(renderer, x, y, width * scaling, height * scaling, colour);
+}
+void Renderer::Circle::draw(SDL_Renderer *renderer, int x, int y, float scaling){
+    draw_filled_circle(renderer, x, y, radius * scaling, colour);
+}
 
+Renderer::~Renderer(){
+    TTF_Quit();
+    SDL_DestroyRenderer(sdl_renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+}
+
+void Renderer::clear_screen(){
+    SDL_SetRenderDrawColor( sdl_renderer, 0, 0, 0, 0 );
+    SDL_RenderClear(sdl_renderer);
+}
+void Renderer::show_screen(){
+    SDL_RenderPresent( sdl_renderer );
+}
+
+void Renderer::draw_filled_rectangle(SDL_Renderer *renderer, float x, float y, float width, float height, Colour colour){
+    SDL_Rect rect;
+    rect.x = (int) (x - width / 2.0);
+    rect.y = (int) (y - height / 2.0);
+    rect.w = (int) width;
+    rect.h = (int) height;
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0 );
+    SDL_RenderFillRect(renderer, &rect);
+}
+
+void Renderer::draw_filled_circle(SDL_Renderer *renderer, float x, float y, float radius, Colour colour){
+    Renderer::draw_filled_rectangle(renderer, x, y, radius*2, radius*2, colour);
+}
 
 bool Renderer::init_window(){
     bool success = true;
