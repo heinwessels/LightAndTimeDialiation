@@ -13,23 +13,23 @@ public:
     class CollisionBox{
     public:
         virtual ~CollisionBox() {}
-        Vec3<float>* pos = NULL;   // Pointer to the position vector of this collision box in space
+        Vec3<double>* pos = NULL;   // Pointer to the position vector of this collision box in space
         virtual bool collision_with(CollisionBox *box) = 0;
-        void add_pos_ptr(Vec3<float> *p) {pos = p;}
+        void add_pos_ptr(Vec3<double> *p) {pos = p;}
         virtual CollisionBox *clone() const = 0;
 
     };
     class Rectangle: public CollisionBox{
     public:
-        float width, height;
-        Rectangle(float w, float h) : width(w), height(h) {};
+        double width, height;
+        Rectangle(double w, double h) : width(w), height(h) {};
         virtual bool collision_with(CollisionBox *box);
         virtual Rectangle *clone() const {return new Rectangle(*this);};
     };
     class Circle: public CollisionBox{
     public:
-        float radius;
-        Circle(float r) : radius (r) {};
+        double radius;
+        Circle(double r) : radius (r) {};
         virtual bool collision_with(CollisionBox *box);
         virtual Circle *clone() const {return new Circle(*this);};
     };

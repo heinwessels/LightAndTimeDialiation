@@ -6,8 +6,8 @@
 
 int main( int argc, char* args[] )
 {
-    Vec3<float> a (0, 0, 0);
-    Vec3<float> b (0, -21, 0);
+    Vec3<double> a (0, 0, 0);
+    Vec3<double> b (0, -21, 0);
 
     Physics::Rectangle rectangle1 (20, 20);
     rectangle1.add_pos_ptr(&a);

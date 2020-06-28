@@ -8,9 +8,9 @@
 class Matter{
 public:
 
-    Vec3<float> pos;
-    Vec3<float> speed;
-    float weight;
+    Vec3<double> pos;
+    Vec3<double> speed;
+    double weight;
     Physics::CollisionBox *collision_box = NULL;
     Renderer::Graphic *graphic = NULL;
 
@@ -19,11 +19,11 @@ public:
     Matter(){};
     ~Matter();
 
-    Matter(Vec3<float> p, Vec3<float> sp, float w) : pos(p), speed(sp), weight(w){};
+    Matter(Vec3<double> p, Vec3<double> sp, double w) : pos(p), speed(sp), weight(w){};
     void add_collisionbox(Physics::CollisionBox *collision_box);
     void add_graphic(Renderer::Graphic *graphic);
 
-    // void step(Universe &universe);
+
 };
 
 #endif
