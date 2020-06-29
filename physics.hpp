@@ -40,6 +40,16 @@ public:
         static bool collision_between_circle_and_circle(Physics::Circle &circle1, Physics::Circle &circle2);
     };
 
+    class Mass{
+    public:
+        double mass = 0;
+        Vec3<double> pos = 0;
+        Vec3<double> speed = 0;
+        Mass(){};
+        Mass(double mass, Vec3<double> pos, Vec3<double> speed) : mass(mass), pos(pos), speed(speed) {};
+        void apply_force(Vec3<double> force, double time);
+        Vec3<double> gravitational_force_with(Physics::Mass &other);
+    };
 };
 
 #endif

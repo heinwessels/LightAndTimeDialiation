@@ -46,3 +46,17 @@ bool Physics::Circle::collision_with(Physics::CollisionBox *box){
        return CollisionHandler::collision_between_circle_and_circle(*this, *dynamic_cast<Physics::Circle*>(box));
     }
 }
+
+void Physics::Mass::apply_force(Vec3<double> force, double time){
+    Vec3<double> acceleration = force / mass;
+    speed += acceleration * time;   // The next formule uses the final speed
+    pos += speed * time - (acceleration * 0.5 * time * time);
+}
+
+Vec3<double> Physics::Mass::gravitational_force_with(Physics::Mass &other){
+    Vec3<double> dpos = (pos - other.pos);
+    float r3 = dpos.x*dpos.x + dpos.y*dpos.y;
+    r3 *=  sqrt(r3);
+    float f = mass * other.mass / r3;
+    return Vec3<double>(f * dpos.x, f * dpos.y, 0);
+}
