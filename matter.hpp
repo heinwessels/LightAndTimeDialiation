@@ -19,6 +19,14 @@ public:
     Matter(double weight, Vec3<double> pos, Vec3<double> speed) : Physics::Mass(weight, pos, speed) {};
     void add_collisionbox(Physics::CollisionBox *collision_box);
     void add_graphic(Renderer::Graphic *graphic);
+
+    virtual bool collide_with_should_destroy(Matter &other){return false;};
+};
+
+
+class Photon : public Matter{
+public:
+    virtual bool collide_with_should_destroy(Matter &other){return true;}; // Photons always die on collision
 };
 
 #endif
