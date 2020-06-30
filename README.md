@@ -13,3 +13,7 @@ This project will simulate emitted light being bent by space-time, hopefully als
   - Collisions of `Matter` is handled by the internal `Shape` variable, where `Shape` can be either `Rectangle` or `Circle` (with `Shape` as base class). Then calling e.g. `Shape::Rectangle.collision_with(?)` directs to the correct method in `Shape` to handle the collision.
 - **Factory Pattern:**
   - Handle of shape collisions in Pyshics engine (TODO)
+
+
+## TODO
+- Improve circle drawing algorithm to use Bresenham.

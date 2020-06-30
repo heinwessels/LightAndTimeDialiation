@@ -17,7 +17,7 @@ public:
     void run();
     void handle_input();
 
-    Controller(){init();}
+    Controller(){};
     ~Controller();
 private:
     enum State {idle, running, single_step, exit};

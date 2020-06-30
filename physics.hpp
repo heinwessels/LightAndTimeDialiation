@@ -23,6 +23,7 @@ public:
     public:
         double width, height;
         Rectangle(double w, double h) : width(w), height(h) {};
+        Rectangle(double w, double h, Vec3<double> *p) : width(w), height(h) {pos = p;};
         virtual bool collision_with(CollisionBox *box);
         virtual Rectangle *clone() const {return new Rectangle(*this);};
     };
@@ -30,6 +31,7 @@ public:
     public:
         double radius;
         Circle(double r) : radius (r) {};
+        Circle(double r, Vec3<double> *p) : radius (r) {pos = p;};
         virtual bool collision_with(CollisionBox *box);
         virtual Circle *clone() const {return new Circle(*this);};
     };
@@ -45,10 +47,12 @@ public:
         double mass = 0;
         Vec3<double> pos = 0;
         Vec3<double> speed = 0;
+        bool affected_by_gravity = false;
         Mass(){};
         Mass(double mass, Vec3<double> pos, Vec3<double> speed) : mass(mass), pos(pos), speed(speed) {};
-        void apply_force(Vec3<double> force, double time);
-        Vec3<double> gravitational_force_with(Physics::Mass &other);
+        void apply_force_for_duration(Vec3<double> force, double time);
+        void apply_force_for_duration_with_ref_speed(Vec3<double> force, double time, Vec3<double> ref_speed);
+        Vec3<double> gravitational_force_to(Physics::Mass &other);
     };
 };
 

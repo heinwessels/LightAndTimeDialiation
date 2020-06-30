@@ -28,12 +28,25 @@ void Renderer::draw_filled_rectangle(SDL_Renderer *renderer, float x, float y, f
     rect.y = (int) (y - height / 2.0);
     rect.w = (int) width;
     rect.h = (int) height;
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0 );
+    SDL_SetRenderDrawColor(renderer, colour.r, colour.g, colour.b, colour.a);
     SDL_RenderFillRect(renderer, &rect);
 }
 
 void Renderer::draw_filled_circle(SDL_Renderer *renderer, float x, float y, float radius, Colour colour){
-    Renderer::draw_filled_rectangle(renderer, x, y, radius*2, radius*2, colour);
+    // TODO: This is a inefficient algorithm. Try Bresenham.
+    SDL_SetRenderDrawColor(renderer, colour.r, colour.g, colour.b, colour.a);
+    for (int w = 0; w < radius * 2; w++)
+    {
+        for (int h = 0; h < radius * 2; h++)
+        {
+            int dx = radius - w; // horizontal offset
+            int dy = radius - h; // vertical offset
+            if ((dx*dx + dy*dy) <= (radius * radius))
+            {
+                SDL_RenderDrawPoint(renderer, x + dx, y + dy);
+            }
+        }
+    }
 }
 
 std::vector<SDL_Event> Renderer::poll_events(){
