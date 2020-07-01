@@ -20,7 +20,7 @@ class Universe{
         float ref_scale = 1;                        // in meter per pixel
         float zoom = 1;
         Observer(int screen_width, int screen_height) : screen_size (screen_width, screen_width, 0) {};
-        Vec3<double> get_screen_position(Vec3<double> pos){return pos * (ref_scale * zoom) + screen_size / 2 + cam_pos;}
+        Vec3<double> get_screen_position(Vec3<double> pos){return pos * (ref_scale * zoom) + screen_size / 2 + cam_pos*zoom;}
         double get_scale_factor(){return ref_scale * zoom;}
     };
     Observer observer;

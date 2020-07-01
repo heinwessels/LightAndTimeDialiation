@@ -52,16 +52,17 @@ public:
 
     static void draw_filled_rectangle(SDL_Renderer *renderer, float x, float y, float width, float height, Colour colour);
     static void draw_filled_circle(SDL_Renderer *renderer, float x, float y, float radius, Colour colour);
+    static void render_text(SDL_Renderer *renderer, int x, int y, const char *text, TTF_Font *font, SDL_Rect *rect, SDL_Color *color);
 
-
-// private:
     int screen_width = 1000;
     int screen_height = 1000;
 
     SDL_Window *window;
     SDL_Renderer *sdl_renderer;
     TTF_Font *gfont;
-    const char * gfont_path = "fonts/PixelSplitter-Bold.ttf";
+    // const char * gfont_path = "fonts/PixelSplitter-Bold.ttf";
+    const char * gfont_path = "fonts/Thintel.ttf";
+    // const char * gfont_path = "fonts/Peepo.ttf";
 };
 
 

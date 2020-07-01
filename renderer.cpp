@@ -49,6 +49,26 @@ void Renderer::draw_filled_circle(SDL_Renderer *renderer, float x, float y, floa
     }
 }
 
+void Renderer::render_text(
+    SDL_Renderer *renderer,
+    int x, int y,
+    const char *text,
+    TTF_Font *font, SDL_Rect *rect, SDL_Color *color
+) {
+    SDL_Surface *surface;
+    SDL_Texture *texture;
+
+    surface = TTF_RenderText_Solid(font, text, *color);
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    rect->x = x;
+    rect->y = y;
+    rect->w = surface->w;
+    rect->h = surface->h;
+    SDL_FreeSurface(surface);
+    SDL_RenderCopy(renderer, texture, NULL, rect);
+    SDL_DestroyTexture(texture);
+}
+
 std::vector<SDL_Event> Renderer::poll_events(){
     std::vector<SDL_Event> events;
     SDL_GetKeyboardState(NULL);
@@ -95,7 +115,7 @@ bool Renderer::init_window(){
             {
                 // Setup TTF
                 TTF_Init();
-                gfont = TTF_OpenFont(gfont_path, 18);
+                gfont = TTF_OpenFont(gfont_path, 30);
                 if (gfont == NULL) {
                     fprintf(stderr, "error: font not found\n");
                     exit(EXIT_FAILURE);

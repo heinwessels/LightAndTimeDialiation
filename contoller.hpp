@@ -17,7 +17,6 @@ class Controller{
 public:
     void init();
     void run();
-    void handle_input();
 
     Controller(){};
     ~Controller();
@@ -27,10 +26,16 @@ private:
     static constexpr double time_step_max = 100.0;
     static constexpr double fps_limit = 30.0;
 
+    bool hide_ui = false;
+
     enum State {idle, running, single_step, exit};
     State state = running;
     Renderer *renderer;
     Universe *universe;
+
+    void handle_input();
+    void draw_information(double meas_sim_speed, double sim_time_step, double meas_fps, double sim_time_passed, double meas_render_time);
+    std::string seconds_to_time_string(std::string pre, double seconds, std::string post);
 };
 
 #endif
