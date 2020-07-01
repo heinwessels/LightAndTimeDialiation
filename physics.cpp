@@ -60,9 +60,9 @@ void Physics::Mass::apply_force_for_duration_with_ref_speed(Vec3<double> force, 
 }
 
 Vec3<double> Physics::Mass::gravitational_force_to(Physics::Mass &other){
-    Vec3<double> dpos = (pos - other.pos);
+    Vec3<double> dpos = other.pos - this->pos;
     float r3 = dpos.x*dpos.x + dpos.y*dpos.y;
     r3 *=  sqrt(r3);
-    float f = mass * other.mass / r3;
+    float f = G * mass * other.mass / r3;
     return Vec3<double>(f * dpos.x, f * dpos.y, 0);
 }

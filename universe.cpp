@@ -10,7 +10,7 @@ void Universe::add_matter(Matter *m){
 void Universe::step(double time){
 
     handle_forces(time);
-    handle_collisions();
+    // handle_collisions();
 }
 
 void Universe::handle_forces(double time){
@@ -87,10 +87,11 @@ void Universe::draw(){
     for(int i = 0; i < num_of_matter; i++){
 
         // If graphic is empty (i.e. a <Renderer::Graphic> type), <draw()> will do nothing.
+        Vec3<double> screen_pos = observer.get_screen_position(matter[i]->pos);
         matter[i]->graphic->draw(
             renderer->get_renderer(),
-            matter[i]->pos.x * observer.scale + renderer->screen_width/2,
-            matter[i]->pos.y * observer.scale + renderer->screen_height/2,
+            screen_pos.x,
+            screen_pos.y,
             observer.scale
         );  // TODO The <+renderer->screen_width> is super hacky. Fix!
     }
@@ -101,8 +102,7 @@ void Universe::draw(){
     renderer->show_screen();
 }
 
-
 Universe::~Universe(){
-    delete observer.pos;
+    delete observer.ref_pos;
     delete observer.speed;
 }

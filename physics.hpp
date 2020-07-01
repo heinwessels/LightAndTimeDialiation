@@ -10,6 +10,9 @@
 
 class Physics{
 public:
+
+    static constexpr double G = 6.6743015e-11;
+
     class CollisionBox{
     public:
         virtual ~CollisionBox() {}
@@ -47,7 +50,7 @@ public:
         double mass = 0;
         Vec3<double> pos = 0;
         Vec3<double> speed = 0;
-        bool affected_by_gravity = false;
+        bool affected_by_gravity = true;
         Mass(){};
         Mass(double mass, Vec3<double> pos, Vec3<double> speed) : mass(mass), pos(pos), speed(speed) {};
         void apply_force_for_duration(Vec3<double> force, double time);
