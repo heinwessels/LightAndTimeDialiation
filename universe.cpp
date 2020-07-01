@@ -92,7 +92,7 @@ void Universe::draw(){
             renderer->get_renderer(),
             screen_pos.x,
             screen_pos.y,
-            observer.scale
+            observer.get_scale_factor()
         );  // TODO The <+renderer->screen_width> is super hacky. Fix!
     }
 
