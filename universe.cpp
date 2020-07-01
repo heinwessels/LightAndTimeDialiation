@@ -10,7 +10,7 @@ void Universe::add_matter(Matter *m){
 void Universe::step(double time){
 
     handle_forces(time);
-    // handle_collisions();
+    handle_collisions();
 }
 
 void Universe::handle_forces(double time){
@@ -51,7 +51,7 @@ void Universe::handle_collisions(){
         for (int j = i + 1; j < num_of_matter; j++){
 
             // First make sure there is matter at both indexes
-            if (matter[i] && matter[j]){
+            if (matter[i]!=NULL && matter[j]!=NULL){
 
                 // Check for collision
                 if (matter[i]->collision_box->collision_with(
@@ -72,7 +72,7 @@ void Universe::handle_collisions(){
 
     // Clean out NULLs out of array
     for (int i = 0; i < num_of_matter; i++){
-        if(matter[i]){
+        if(matter[i] == NULL){
             matter[i] = matter[num_of_matter];
             matter[num_of_matter--] = NULL;
         }
