@@ -14,3 +14,11 @@ Matter::~Matter(){
     delete this->collision_box;
     delete this->graphic;
 }
+
+bool Photon::collide_with_should_destroy(Matter *other){
+    // Photon die if colliding with anything except other photons
+    if (Photon* photon = dynamic_cast<Photon*>(other))
+       return false;
+    else
+        return true;
+}

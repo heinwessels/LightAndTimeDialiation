@@ -59,10 +59,10 @@ void Universe::handle_collisions(){
                 )){
 
                     // Handle collision
-                    if(matter[i]->collide_with_should_destroy(*matter[j])){
+                    if(matter[i]->collide_with_should_destroy(matter[j])){
                         delete matter[i]; matter[i] =  NULL;
                     }
-                    if(matter[j]->collide_with_should_destroy(*matter[i])){
+                    if(matter[j]->collide_with_should_destroy(matter[i])){
                         delete matter[j]; matter[j] =  NULL;
                     }
                 }
@@ -93,13 +93,8 @@ void Universe::draw(){
             screen_pos.x,
             screen_pos.y,
             observer.get_scale_factor()
-        );  // TODO The <+renderer->screen_width> is super hacky. Fix!
+        );
     }
-
-    // Then draw some information on the screen
-
-
-    renderer->show_screen();
 }
 
 Universe::~Universe(){

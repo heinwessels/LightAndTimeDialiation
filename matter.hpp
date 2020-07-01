@@ -1,6 +1,8 @@
 #ifndef MATTER_HPP
 #define MATTER_HPP
 
+#include <vector>
+
 #include "vec3.hpp"
 #include "renderer.hpp"
 #include "physics.hpp"
@@ -20,13 +22,13 @@ public:
     void add_collisionbox(Physics::CollisionBox *collision_box);
     void add_graphic(Renderer::Graphic *graphic);
 
-    virtual bool collide_with_should_destroy(Matter &other){return false;};
+    virtual bool collide_with_should_destroy(Matter *other){return false;};
 };
 
 
 class Photon : public Matter{
 public:
-    virtual bool collide_with_should_destroy(Matter &other){return true;}; // Photons always die on collision
+    virtual bool collide_with_should_destroy(Matter *other);
 };
 
 #endif

@@ -98,6 +98,7 @@ void Controller::run(){
             sim_time_passed,
             time_to_render.count()
         );
+        renderer->show_screen();
 
         time_to_loop = clock::now() - time_loop_start;
         time_to_render = clock::now() - time_render_start;
@@ -192,8 +193,6 @@ void Controller::draw_information(
         ).c_str(),
         renderer->gfont, &rect, &color
     );
-
-    renderer->show_screen();
 }
 
 std::string Controller::seconds_to_time_string(std::string pre, double seconds, std::string post){
