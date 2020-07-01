@@ -42,8 +42,6 @@ void Universe::handle_forces(double time){
     }
 }
 
-
-
 void Universe::handle_collisions(){
 
     // Handle Collisions
@@ -73,9 +71,26 @@ void Universe::handle_collisions(){
     // Clean out NULLs out of array
     for (int i = 0; i < num_of_matter; i++){
         if(matter[i] == NULL){
-            matter[i] = matter[num_of_matter];
-            matter[num_of_matter--] = NULL;
+            while(matter[num_of_matter-1] == NULL) {num_of_matter--;} // Make sure last element isn't NULL
+            matter[i] = matter[--num_of_matter];    // Move last pointer to i
+            matter[num_of_matter] = NULL;           // NULL the last pointer
         }
+    }
+}
+
+void Universe::emit_light_from_point(
+    Vec3<double> pos,
+    double offset_radius,
+    double amount
+){
+    for (double th = 0; th < 2*M_PI; th+=2*M_PI/amount){
+        Vec3<double> dir (cos(th), sin(th), 0);
+        add_matter(
+            new Photon(
+                pos + dir * offset_radius,
+                dir
+            )
+        );
     }
 }
 

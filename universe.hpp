@@ -22,6 +22,7 @@ class Universe{
         Observer(int screen_width, int screen_height) : screen_size (screen_width, screen_width, 0) {};
         Vec3<double> get_screen_position(Vec3<double> pos){return pos * (ref_scale * zoom) + screen_size / 2 + cam_pos*zoom;}
         double get_scale_factor(){return ref_scale * zoom;}
+        Vec3<double> get_universe_pos_from_screen(Vec3<double> pos){return (pos - cam_pos * zoom - screen_size / 2) / (ref_scale * zoom);}
     };
     Observer observer;
 
@@ -31,11 +32,10 @@ class Universe{
     void draw();
 
     void add_matter(Matter *matter);
+    void emit_light_from_point(Vec3<double> pos, double offset_radius, double amount);
 
-private:
-
-    static const int max_matter = 100;
-    Matter * matter [max_matter];
+    static const int max_matter = 10000;
+    Matter * matter [max_matter] = {NULL};
     int num_of_matter = 0;
 
     Renderer *renderer;

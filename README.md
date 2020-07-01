@@ -14,6 +14,17 @@ This project will simulate emitted light being bent by space-time, hopefully als
 - **Factory Pattern:**
   - Handle of shape collisions in Pyshics engine (TODO)
 
+## Unsure
+- Creation (using `new`) and deletion (using `delete`) of matter, collision boxes and graphics.
 
 ## TODO
 - Improve circle drawing algorithm to use Bresenham.
+- Write `step` function for `matter` so that photons don't need to do a gravity calculation.
+- Remove photons that are too far away from the origin.
+
+## Cool Physics Things
+- Light is affected by gravity even though it has **zero mass**! A thought experiment called the Equivalence Principle reasons why this can be observed [here](https://astronomy.stackexchange.com/questions/29122/if-light-has-no-mass-why-is-it-affected-by-gravity). Einstein considered this experiment as his *Happiest Thought*. What really happens is that gravity bends *space time*, and light is traveling in a straight line on that bent path. There
+
+
+## Calculating Light Deflection and Slow Down
+Gravitional lens

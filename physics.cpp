@@ -48,9 +48,18 @@ bool Physics::Circle::collision_with(Physics::CollisionBox *box){
 }
 
 void Physics::Mass::apply_force_for_duration(Vec3<double> force, double time){
-    Vec3<double> acceleration = force / mass;
-    speed += acceleration * time;   // The next formule uses the final speed
-    pos += speed * time - (acceleration * 0.5 * time * time);
+    if (mass > 1e-6){
+        // Check that there is sufficient mass to do this calculation
+        //Mostly requried for photons
+        Vec3<double> acceleration = force / mass;
+        speed += acceleration * time;   // The next formule uses the final speed
+        pos += speed * time - (acceleration * 0.5 * time * time);
+    }
+    else{
+        // Can't accelerate object using force with no mass
+        pos += speed * time;
+    }
+
 }
 
 void Physics::Mass::apply_force_for_duration_with_ref_speed(Vec3<double> force, double time, Vec3<double> ref_speed){

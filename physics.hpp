@@ -11,7 +11,8 @@
 class Physics{
 public:
 
-    static constexpr double G = 6.6743015e-11;
+    static constexpr double G = 6.6743015e-11;  // Gravitational Constant
+    static constexpr double c = 299792458;      // Speed of Light
 
     class CollisionBox{
     public:

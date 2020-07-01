@@ -193,6 +193,17 @@ void Controller::draw_information(
         ).c_str(),
         renderer->gfont, &rect, &color
     );
+
+    renderer->render_text(
+        renderer->sdl_renderer, 10, rect.y + y_spacing,
+        std::string("Number of Objects:").c_str(),
+        renderer->gfont, &rect, &color
+    );
+    renderer->render_text(
+        renderer->sdl_renderer, x_2nd_col, rect.y,
+        std::to_string(universe->num_of_matter).c_str(),
+        renderer->gfont, &rect, &color
+    );
 }
 
 std::string Controller::seconds_to_time_string(std::string pre, double seconds, std::string post){
@@ -312,6 +323,14 @@ void Controller::handle_input(){
                 // Move camera down
                 universe->observer.cam_pos.y --;
             }
+        }
+
+        if (event.type == SDL_MOUSEBUTTONDOWN){
+            universe->emit_light_from_point(
+                universe->observer.get_universe_pos_from_screen(Vec3<double> (event.motion.x, event.motion.y, 0)),
+                1000.0,
+                500
+            );
         }
     }
 }
