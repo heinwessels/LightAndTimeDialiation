@@ -32,6 +32,7 @@ class Universe{
     void draw();
 
     void add_matter(Matter *matter);
+    void clear_light_outside_boundary(Vec3<double> mininum, Vec3<double> maximum);
     void emit_light_from_point(Vec3<double> pos, double offset_radius, double amount);
 
     static const int max_matter = 10000;

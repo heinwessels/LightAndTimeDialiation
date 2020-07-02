@@ -15,30 +15,25 @@ void Universe::step(double time){
 
 void Universe::handle_forces(double time){
 
-    Vec3<double> forces [max_matter];
-    for (int i = 0; i < num_of_matter; i++){
-        forces[i].x = 0; forces[i].y = 0;
-    }
-
     for (int i = 0; i < num_of_matter; i++){
         for (int j = i + 1; j < num_of_matter; j++){
 
-            // Calculate the force betwe en the two bodies
-            Vec3<double> force = matter[i]->gravitational_force_to(*matter[j]);
+            // Is a Newtonian gravity calculation requried?
+            if (matter[i]->affected_by_gravity || matter[i]->affected_by_gravity){
 
-            // Apply the force to the body if it's not stationary (both of them)
-            if (matter[i]->affected_by_gravity)
-                forces[i] += force;
-            if (matter[j]->affected_by_gravity)
-                forces[j] -= force;  // Inverting it for the other body
+                // Calculate the force betwe en the two bodies
+                Vec3<double> force = matter[i]->newtonian_gravitational_force_to(*matter[j]);
+
+                // Apply the force to the body if it's not stationary (both of them)
+                if (matter[i]->affected_by_gravity)
+                    matter[i]->apply_force(force);
+                if (matter[j]->affected_by_gravity)
+                    matter[j]->apply_force(Vec3<double>(0.0)-force);
+            }
         }
 
-        // When all the forces for this matter has been calculated, apply to the matter
-        if(matter[i]->affected_by_gravity)
-            matter[i]->apply_force_for_duration(
-                forces[i],
-                time
-            );
+        // Step this piece of matter in time
+        matter[i]->step(time);
     }
 }
 
@@ -48,7 +43,7 @@ void Universe::handle_collisions(){
     for (int i = 0; i < num_of_matter; i++){
         for (int j = i + 1; j < num_of_matter; j++){
 
-            // First make sure there is matter at both indexes
+            // A previous collision could have deleted the matter at i or j
             if (matter[i]!=NULL && matter[j]!=NULL){
 
                 // Check for collision
@@ -76,6 +71,13 @@ void Universe::handle_collisions(){
             matter[num_of_matter] = NULL;           // NULL the last pointer
         }
     }
+}
+
+void Universe::clear_light_outside_boundary(
+    Vec3<double> mininum,
+    Vec3<double> maximum
+){
+
 }
 
 void Universe::emit_light_from_point(

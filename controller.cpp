@@ -20,7 +20,7 @@ void Controller::init(){
     earth->add_collisionbox(&earth_colbox);
     Renderer::Circle earth_graphic (earth_colbox.radius, Renderer::Colour(0, 0, 255, 0));
     earth->add_graphic(&earth_graphic);
-    universe->add_matter(earth);
+    // universe->add_matter(earth);
 
     // Create Moon
     Matter * moon = new Matter(
@@ -32,7 +32,7 @@ void Controller::init(){
     moon->add_collisionbox(&moon_colbox);
     Renderer::Circle moon_graphic (moon_colbox.radius, Renderer::Colour(255, 255, 255, 0));
     moon->add_graphic(&moon_graphic);
-    universe->add_matter(moon);
+    // universe->add_matter(moon);
 
     // Setup Observer
     universe->observer.ref_pos = new Vec3<double>(0);

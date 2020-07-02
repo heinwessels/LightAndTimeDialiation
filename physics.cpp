@@ -47,28 +47,31 @@ bool Physics::Circle::collision_with(Physics::CollisionBox *box){
     }
 }
 
-void Physics::Mass::apply_force_for_duration(Vec3<double> force, double time){
-    if (mass > 1e-6){
-        // Check that there is sufficient mass to do this calculation
-        //Mostly requried for photons
-        Vec3<double> acceleration = force / mass;
+void Physics::Mass::apply_force(Vec3<double> force){
+    force_applied += force; // The force will applied to the mass when <step> is called
+}
+void Physics::Mass::step(double time){
+
+    Vec3<double> force_to_apply = force_base + force_applied;
+    // First make sure there's sufficient mass to calculate acceleration,
+    // and that theres an actual force applied
+    if (mass > 1e-6 && (
+        (force_to_apply.x != 0 || force_to_apply.y != 0 || force_to_apply.z != 0)
+    )){
+        Vec3<double> acceleration = (force_base + force_applied) / mass;
         speed += acceleration * time;   // The next formule uses the final speed
         pos += speed * time - (acceleration * 0.5 * time * time);
+
+        // Now clear the <force_applied> since it's been handled
+        force_applied = Vec3<double> (0.0);
     }
     else{
         // Can't accelerate object using force with no mass
         pos += speed * time;
     }
-
 }
 
-void Physics::Mass::apply_force_for_duration_with_ref_speed(Vec3<double> force, double time, Vec3<double> ref_speed){
-    Vec3<double> acceleration = force / mass;
-    speed += acceleration * time;   // The next formule uses the final speed
-    pos += (speed - ref_speed) * time - (acceleration * 0.5 * time * time);
-}
-
-Vec3<double> Physics::Mass::gravitational_force_to(Physics::Mass &other){
+Vec3<double> Physics::Mass::newtonian_gravitational_force_to(Physics::Mass &other){
     Vec3<double> dpos = other.pos - this->pos;
     float r3 = dpos.x*dpos.x + dpos.y*dpos.y;
     r3 *=  sqrt(r3);

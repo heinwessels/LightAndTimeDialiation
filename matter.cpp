@@ -18,7 +18,7 @@ Matter::~Matter(){
 Photon::Photon(Vec3<double> p, Vec3<double> dir){
     pos = p;
     mass = 0;
-    // affected_by_gravity = false;    // Will have special equation?
+    affected_by_gravity = false;    // Not in the Newtonian way
     speed = dir * Physics::c;
 
     Physics::Circle *col = new Physics::Circle(0.1, &pos);
