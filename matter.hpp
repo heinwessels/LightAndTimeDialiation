@@ -25,7 +25,6 @@ public:
     virtual bool collide_with_should_destroy(Matter *other){return false;};
 };
 
-
 class Photon : public Matter{
 public:
     Photon(Vec3<double> p, Vec3<double> dir);

@@ -1,10 +1,7 @@
 #include "universe.hpp"
 
 void Universe::add_matter(Matter *m){
-    if (num_of_matter + 1 >= max_matter)
-        printf("WARNING: Matter overflow!\n");
-    else
-        matter[num_of_matter++] = m;
+    matter.push_back(m);
 }
 
 void Universe::step(double time){
@@ -15,8 +12,8 @@ void Universe::step(double time){
 
 void Universe::handle_forces(double time){
 
-    for (int i = 0; i < num_of_matter; i++){
-        for (int j = i + 1; j < num_of_matter; j++){
+    for (int i = 0; i < matter.size(); i++){
+        for (int j = i + 1; j < matter.size(); j++){
 
             // Is a Newtonian gravity calculation requried?
             if (matter[i]->affected_by_gravity || matter[i]->affected_by_gravity){
@@ -35,40 +32,50 @@ void Universe::handle_forces(double time){
         // Step this piece of matter in time
         matter[i]->step(time);
     }
+
 }
 
 void Universe::handle_collisions(){
 
     // Handle Collisions
-    for (int i = 0; i < num_of_matter; i++){
-        for (int j = i + 1; j < num_of_matter; j++){
+    int i = 0, j;
+    while (i < matter.size() - 1){  // <i> must never reach last element, cause that will element <j>
+        j = i + 1;
+        while (j < matter.size()){
 
-            // A previous collision could have deleted the matter at i or j
-            if (matter[i]!=NULL && matter[j]!=NULL){
+            // Check for collision
+            if (matter[i]->collision_box->collision_with(
+                matter[j]->collision_box
+            )){
 
-                // Check for collision
-                if (matter[i]->collision_box->collision_with(
-                    matter[j]->collision_box
-                )){
+                // Need to do attempt destroy and destroy seperately, as it changes <matter>
+                bool should_destroy_i = matter[i]->collide_with_should_destroy(matter[j]);
+                bool should_destroy_j = matter[j]->collide_with_should_destroy(matter[i]);
 
-                    // Handle collision
-                    if(matter[i]->collide_with_should_destroy(matter[j])){
-                        delete matter[i]; matter[i] =  NULL;
-                    }
-                    if(matter[j]->collide_with_should_destroy(matter[i])){
-                        delete matter[j]; matter[j] =  NULL;
-                    }
+                // Do destroying
+                if(should_destroy_i){
+                    matter.erase (matter.begin() + i - 1);
+                }
+                if(should_destroy_j){
+                    matter.erase (matter.begin() + j - 1 - (should_destroy_i ? 1 : 0)); // If <i> was destroyed, the <j>'s index will be one less
+                }
+
+                // What happens next depends on what was destroyed
+                if (should_destroy_i){
+                    j = i + 1;      // Remember, the next <i> element basically moved to the current index after erase
+                }
+                else if(should_destroy_j){
+                    // Do nothing. <j> should stay the same, for the same reason why <i> remains the same for <erased_i>
+                }
+                else{
+                    j++;
                 }
             }
-        }
-    }
+            else{
+                j ++;
+            }
 
-    // Clean out NULLs out of array
-    for (int i = 0; i < num_of_matter; i++){
-        if(matter[i] == NULL){
-            while(matter[num_of_matter-1] == NULL) {num_of_matter--;} // Make sure last element isn't NULL
-            matter[i] = matter[--num_of_matter];    // Move last pointer to i
-            matter[num_of_matter] = NULL;           // NULL the last pointer
+            i++;
         }
     }
 }
@@ -101,7 +108,7 @@ void Universe::draw(){
     renderer->clear_screen();
 
     // First draw all matter
-    for(int i = 0; i < num_of_matter; i++){
+    for(int i = 0; i < matter.size(); i++){
 
         // If graphic is empty (i.e. a <Renderer::Graphic> type), <draw()> will do nothing.
         Vec3<double> screen_pos = observer.get_screen_position(matter[i]->pos);
@@ -112,6 +119,7 @@ void Universe::draw(){
             observer.get_scale_factor()
         );
     }
+
 }
 
 Universe::~Universe(){

@@ -20,7 +20,7 @@ void Controller::init(){
     earth->add_collisionbox(&earth_colbox);
     Renderer::Circle earth_graphic (earth_colbox.radius, Renderer::Colour(0, 0, 255, 0));
     earth->add_graphic(&earth_graphic);
-    // universe->add_matter(earth);
+    universe->add_matter(earth);
 
     // Create Moon
     Matter * moon = new Matter(
@@ -32,7 +32,7 @@ void Controller::init(){
     moon->add_collisionbox(&moon_colbox);
     Renderer::Circle moon_graphic (moon_colbox.radius, Renderer::Colour(255, 255, 255, 0));
     moon->add_graphic(&moon_graphic);
-    // universe->add_matter(moon);
+    universe->add_matter(moon);
 
     // Setup Observer
     universe->observer.ref_pos = new Vec3<double>(0);
@@ -201,7 +201,7 @@ void Controller::draw_information(
     );
     renderer->render_text(
         renderer->sdl_renderer, x_2nd_col, rect.y,
-        std::to_string(universe->num_of_matter).c_str(),
+        std::to_string(universe->get_num_of_matter()).c_str(),
         renderer->gfont, &rect, &color
     );
 }
@@ -329,7 +329,7 @@ void Controller::handle_input(){
             universe->emit_light_from_point(
                 universe->observer.get_universe_pos_from_screen(Vec3<double> (event.motion.x, event.motion.y, 0)),
                 1000.0,
-                500
+                10
             );
         }
     }

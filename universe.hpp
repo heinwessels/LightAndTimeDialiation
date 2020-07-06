@@ -35,10 +35,9 @@ class Universe{
     void clear_light_outside_boundary(Vec3<double> mininum, Vec3<double> maximum);
     void emit_light_from_point(Vec3<double> pos, double offset_radius, double amount);
 
-    static const int max_matter = 10000;
-    Matter * matter [max_matter] = {NULL};
-    int num_of_matter = 0;
+    int get_num_of_matter(){return matter.size();}
 
+    std::vector<Matter*> matter;
     Renderer *renderer;
 };
 
