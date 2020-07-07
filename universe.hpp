@@ -1,6 +1,7 @@
 #ifndef UNIVERSE_HPP
 #define UNIVERSE_HPP
 
+#include <memory>
 #include <vector>
 
 #include "matter.hpp"
@@ -31,13 +32,18 @@ class Universe{
     void handle_collisions();
     void draw();
 
-    void add_matter(Matter *matter);
+    void add_matter(std::unique_ptr<Matter> matter);
     void clear_light_outside_boundary(Vec3<double> mininum, Vec3<double> maximum);
     void emit_light_from_point(Vec3<double> pos, double offset_radius, double amount);
 
     int get_num_of_matter(){return matter.size();}
 
-    std::vector<Matter*> matter;
+    // STORAGE OF ALL MATTER
+    // Using container of matter *pointers* to avoid slicing during polymorphism.
+    // Using <std::unique_ptr> to automatically handle memory management
+    std::vector<std::unique_ptr<Matter> > matter;
+
+
     Renderer *renderer;
 };
 

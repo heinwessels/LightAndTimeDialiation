@@ -1,13 +1,16 @@
 #include "universe.hpp"
 
-void Universe::add_matter(Matter *m){
-    matter.push_back(m);
+void Universe::add_matter(std::unique_ptr<Matter> m){
+    // Passing <unique_ptr> by value to transfer ownership.
+    // Use: Base add_matter(std::move(m));
+    //      Base add_matter(std::unique_ptr<Matter>(new Matter(...));
+    matter.push_back(std::move(m)); // Change the owenership from <m> to <matter>
 }
 
 void Universe::step(double time){
 
     handle_forces(time);
-    handle_collisions();
+    // handle_collisions();
 }
 
 void Universe::handle_forces(double time){
@@ -49,8 +52,8 @@ void Universe::handle_collisions(){
             )){
 
                 // Need to do attempt destroy and destroy seperately, as it changes <matter>
-                bool should_destroy_i = matter[i]->collide_with_should_destroy(matter[j]);
-                bool should_destroy_j = matter[j]->collide_with_should_destroy(matter[i]);
+                bool should_destroy_i = matter[i]->collide_with_should_destroy(matter[j].get());
+                bool should_destroy_j = matter[j]->collide_with_should_destroy(matter[i].get());
 
                 // Do destroying
                 if(should_destroy_i){
@@ -95,7 +98,7 @@ void Universe::emit_light_from_point(
     for (double th = 0; th < 2*M_PI; th+=2*M_PI/amount){
         Vec3<double> dir (cos(th), sin(th), 0);
         add_matter(
-            new Photon(
+            std::make_unique<Photon>(
                 pos + dir * offset_radius,
                 dir
             )
