@@ -11,27 +11,22 @@ void Controller::init(){
     universe = new Universe(*renderer);
 
     // Create Earth
-    auto earth = std::make_unique<Matter>(
+    auto earth = std::make_unique<Body>(
         (double)(6e24),
-        Vec3<double> (0, 0 , 0),
-        Vec3<double> (0, 0, 0)
+        Vec3<double> (0, 0, 0),
+        Vec3<double> (0, 0, 0),
+        6378100
     );
-    // Physics::Circle earth_colbox (6378100, &earth->pos);
-    // earth->add_collisionbox(&earth_colbox);
-    Renderer::Circle earth_graphic (6378100, Renderer::Colour(0, 0, 255, 0));
-    earth->add_graphic(&earth_graphic);
     universe->add_matter(std::move(earth)); // Move ownership from <earth> to function call
 
     // Create Moon
-    auto moon = std::make_unique<Matter>(
+    auto moon = std::make_unique<Body>(
         (double)(7.35e22),
         Vec3<double> (384400000, 0, 0),
-        Vec3<double> (0, 1022, 0)
+        Vec3<double> (0, 1022, 0),
+        1738100
     );
-    // Physics::Circle moon_colbox (1738100, &moon->pos);
-    // moon->add_collisionbox(&moon_colbox);
-    Renderer::Circle moon_graphic (1738100, Renderer::Colour(255, 255, 255, 0));
-    moon->add_graphic(&moon_graphic);
+    moon->graphic->colour = Renderer::Colour(255, 255, 255, 255);
     universe->add_matter(std::move(moon));
 
     // Setup Observer

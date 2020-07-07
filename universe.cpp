@@ -10,7 +10,7 @@ void Universe::add_matter(std::unique_ptr<Matter> m){
 void Universe::step(double time){
 
     handle_forces(time);
-    // handle_collisions();
+    handle_collisions();
 }
 
 void Universe::handle_forces(double time){
@@ -47,9 +47,7 @@ void Universe::handle_collisions(){
         while (j < matter.size()){
 
             // Check for collision
-            if (matter[i]->collision_box->collision_with(
-                matter[j]->collision_box
-            )){
+            if (matter[i]->collision_with(matter[j].get())){
 
                 // Need to do attempt destroy and destroy seperately, as it changes <matter>
                 bool should_destroy_i = matter[i]->collide_with_should_destroy(matter[j].get());

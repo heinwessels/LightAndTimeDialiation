@@ -1,49 +1,46 @@
 #include "physics.hpp"
 
-bool Physics::CollisionHandler::collision_between_rectangle_and_rectangle(Rectangle &rectangle1, Rectangle &rectangle2){
-    if (rectangle1.pos == NULL || rectangle2.pos == NULL){
-        printf("ERROR! Collision box's position was not defined!\n");
-        throw;
-    }
-    return  (rectangle1.pos->x - rectangle1.width / 2 )     < (rectangle2.pos->x + rectangle2.width / 2) &&
-            (rectangle1.pos->x + rectangle1.width / 2 )     > (rectangle2.pos->x - rectangle2.width / 2) &&
-            (rectangle1.pos->y - rectangle1.height / 2 )    < (rectangle2.pos->y + rectangle2.height / 2) &&
-            (rectangle1.pos->y + rectangle1.height / 2 )    > (rectangle2.pos->y - rectangle2.height / 2);
+bool Physics::CollisionHandler::collision_between_rectangle_and_rectangle(
+    Vec3<double> rect1_pos, Physics::Rectangle &rect1,
+    Vec3<double> rect2_pos, Physics::Rectangle &rect2
+){
+    return  (rect1_pos.x - rect1.width / 2 )     < (rect2_pos.x + rect2.width / 2) &&
+            (rect1_pos.x + rect1.width / 2 )     > (rect2_pos.x - rect2.width / 2) &&
+            (rect1_pos.y - rect1.height / 2 )    < (rect2_pos.y + rect2.height / 2) &&
+            (rect1_pos.y + rect1.height / 2 )    > (rect2_pos.y - rect2.height / 2);
 }
-bool Physics::CollisionHandler::collision_between_rectangle_and_circle(Rectangle &rectangle, Circle &circle){
-    if (rectangle.pos == NULL || circle.pos == NULL){
-        printf("ERROR! Collision box's position was not defined!\n");
-        throw;
-    }
-    double  dx = abs(circle.pos->x - rectangle.pos->x) - rectangle.width / 2,
-            dy = abs(circle.pos->y - rectangle.pos->y) - rectangle.height / 2;
-    if (dx > circle.radius || dy > circle.radius) { return false; }
+bool Physics::CollisionHandler::collision_between_rectangle_and_circle(
+    Vec3<double> rect_pos, Physics::Rectangle &rect,
+    Vec3<double> circ_pos, Physics::Circle &circ
+){
+    double  dx = abs(circ_pos.x - rect_pos.x) - rect.width / 2,
+            dy = abs(circ_pos.y - rect_pos.y) - rect.height / 2;
+    if (dx > circ.radius || dy > circ.radius) { return false; }
     if (dx <= 0 || dy <= 0) { return true; }
-    return (dx * dx + dy * dy <= circle.radius * circle.radius);
+    return (dx * dx + dy * dy <= circ.radius * circ.radius);
 }
-bool Physics::CollisionHandler::collision_between_circle_and_circle(Circle &circle1, Circle &circle2){
-    if (circle1.pos == NULL || circle2.pos == NULL){
-        printf("ERROR! Collision box's position was not defined!\n");
-        throw;
-    }
-    return (circle1.pos->x-circle2.pos->x)*(circle1.pos->x-circle2.pos->x) + (circle1.pos->y-circle2.pos->y)*(circle1.pos->y-circle2.pos->y)
-            < (circle1.radius + circle2.radius)*(circle1.radius + circle2.radius);
+bool Physics::CollisionHandler::collision_between_circle_and_circle(
+    Vec3<double> circ1_pos, Physics::Circle &circ1,
+    Vec3<double> circ2_pos, Physics::Circle &circ2
+){
+    return (circ1_pos.x-circ2_pos.x)*(circ1_pos.x-circ2_pos.x) + (circ1_pos.y-circ2_pos.y)*(circ1_pos.y-circ2_pos.y)
+            < (circ1.radius + circ2.radius)*(circ1.radius + circ2.radius);
 }
 
-bool Physics::Rectangle::collision_with(Physics::CollisionBox *box){
+bool Physics::Rectangle::collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox *other_box){
     // This doesn't follow DRY, and derived classes needs to know of each other.
-    if (Physics::Rectangle* rectangle = dynamic_cast<Physics::Rectangle*>(box)){
-       return CollisionHandler::collision_between_rectangle_and_rectangle(*this, *rectangle);
+    if (Physics::Rectangle* rectangle = dynamic_cast<Physics::Rectangle*>(other_box)){
+       return CollisionHandler::collision_between_rectangle_and_rectangle(this_pos, *this, other_pos, *rectangle);
     } else {
-       return CollisionHandler::collision_between_rectangle_and_circle(*this, *dynamic_cast<Physics::Circle*>(box));
+       return CollisionHandler::collision_between_rectangle_and_circle(this_pos, *this, other_pos, *dynamic_cast<Physics::Circle*>(other_box));
     }
 }
-bool Physics::Circle::collision_with(Physics::CollisionBox *box){
+bool Physics::Circle::collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox *other_box){
     // This doesn't follow DRY, and derived classes needs to know of each other.
-    if (Physics::Rectangle* rectangle = dynamic_cast<Physics::Rectangle*>(box)){
-       return CollisionHandler::collision_between_rectangle_and_circle(*rectangle, *this);
+    if (Physics::Rectangle* rectangle = dynamic_cast<Physics::Rectangle*>(other_box)){
+       return CollisionHandler::collision_between_rectangle_and_circle(this_pos, *rectangle, other_pos, *this);
     } else {
-       return CollisionHandler::collision_between_circle_and_circle(*this, *dynamic_cast<Physics::Circle*>(box));
+       return CollisionHandler::collision_between_circle_and_circle(this_pos, *this, other_pos, *dynamic_cast<Physics::Circle*>(other_box));
     }
 }
 

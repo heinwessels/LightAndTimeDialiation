@@ -17,9 +17,7 @@ public:
     class CollisionBox{
     public:
         virtual ~CollisionBox() {}
-        Vec3<double>* pos = NULL;   // Pointer to the position vector of this collision box in space
-        virtual bool collision_with(CollisionBox *box) = 0;
-        void add_pos_ptr(Vec3<double> *p) {pos = p;}
+        virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox *other_box) = 0;
         virtual CollisionBox *clone() const = 0;
 
     };
@@ -27,23 +25,21 @@ public:
     public:
         double width, height;
         Rectangle(double w, double h) : width(w), height(h) {};
-        Rectangle(double w, double h, Vec3<double> *p) : width(w), height(h) {pos = p;};
-        virtual bool collision_with(CollisionBox *box);
+        virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox *other_box);
         virtual Rectangle *clone() const {return new Rectangle(*this);};
     };
     class Circle: public CollisionBox{
     public:
         double radius;
         Circle(double r) : radius (r) {};
-        Circle(double r, Vec3<double> *p) : radius (r) {pos = p;};
-        virtual bool collision_with(CollisionBox *box);
+        virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox *other_box);
         virtual Circle *clone() const {return new Circle(*this);};
     };
     class CollisionHandler{
     public:
-        static bool collision_between_rectangle_and_rectangle(Physics::Rectangle &rectangle1, Physics::Rectangle &rectangle2);
-        static bool collision_between_rectangle_and_circle(Physics::Rectangle &rectangle, Physics::Circle &circle);
-        static bool collision_between_circle_and_circle(Physics::Circle &circle1, Physics::Circle &circle2);
+        static bool collision_between_rectangle_and_rectangle(Vec3<double> rect1_pos, Physics::Rectangle &rect1, Vec3<double> rect2_pos, Physics::Rectangle &rect2);
+        static bool collision_between_rectangle_and_circle(Vec3<double> rect_pos, Physics::Rectangle &rect, Vec3<double> circ_pos, Physics::Circle &circ);
+        static bool collision_between_circle_and_circle(Vec3<double> circ1_pos, Physics::Circle &circ1, Vec3<double> circ2_pos, Physics::Circle &circ2);
     };
 
     class Mass{
