@@ -54,10 +54,10 @@ void Universe::handle_collisions(){
 
                 // Do destroying
                 if(should_destroy_i){
-                    matter.erase (matter.begin() + i - 1);
+                    matter.erase (matter.begin() + i);
                 }
                 if(should_destroy_j){
-                    matter.erase (matter.begin() + j - 1 - (should_destroy_i ? 1 : 0)); // If <i> was destroyed, the <j>'s index will be one less
+                    matter.erase (matter.begin() + j - (should_destroy_i ? 1 : 0)); // If <i> was destroyed, the <j>'s index will be one less
                 }
 
                 // What happens next depends on what was destroyed
@@ -74,10 +74,10 @@ void Universe::handle_collisions(){
             else{
                 j ++;
             }
+        }   // End of <j> loop
 
-            i++;
-        }
-    }
+        i++;
+    }   // End of <i> loop
 }
 
 void Universe::clear_light_outside_boundary(
