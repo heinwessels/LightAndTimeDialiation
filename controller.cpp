@@ -304,11 +304,17 @@ void Controller::handle_input(){
             }
             if(event.key.keysym.sym == SDLK_PERIOD){
                 // Speed up simulation
-                simulation_speed += 60;
+                double step = pow(10,floor(log10(
+                    simulation_speed + pow(10,floor(log10(simulation_speed)) - 1)
+                ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
+                simulation_speed += step;
             }
             if(event.key.keysym.sym == SDLK_COMMA){
                 // Slow down simulation
-                simulation_speed -= 60;
+                double step = pow(10,floor(log10(
+                    simulation_speed - pow(10,floor(log10(simulation_speed)) - 1)
+                ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
+                simulation_speed -= step;
             }
             if(event.key.keysym.sym == SDLK_LEFT){
                 // Move camera left
