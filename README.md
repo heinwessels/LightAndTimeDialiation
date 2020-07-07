@@ -1,9 +1,12 @@
 # LightAndTimeDialiation
-This project will simulate emitted light being bent by space-time, hopefully also showing light's change in frequency. The goal is to learn more about C++ OOP practices.
+This project will simulate emitted light being bent by space-time, hopefully also showing light's change in frequency. The goal is to learn more about C++ and OOP best practices. This is my only second real C++ project that I'm programming, so I still have a lot to learn. The idea is too over-design everything to force the use of practices that will be used for large commercial projects.
 
 
 ## Lessons Learned
-- Objects should not contain their full graphic information. Rather just basic information about size, and the renderer should know how to draw it.
+- Having raw arrays of polymorphism objects is **really bad**, because it will cause slicing. Better to use a array of pointers, or even better, `std:unique_ptr`. This will ensure uncompromised memory, and no memory leaks (if used correctly), but is not neccesarally good for caching.
+- There's little reason to use raw arrays. A container like `vector` is just as efficient if used correctly, and has some powerful capabilities.
+- Favour *composition* over *inheritance*. This makes the code more modular and future proof. However, *inheritance* still has it's benifits, as polymorphism can be very powerful.
+- Objects should not contain their full graphic information, e.g. *how* to draw on the screen. Rather just basic information about it's size and colour, and the renderer should know how to draw it.
 
 
 ## Principles Used
@@ -12,15 +15,10 @@ This project will simulate emitted light being bent by space-time, hopefully als
 - **Composition:**
   - Collisions of `Matter` is handled by the internal `Shape` variable, where `Shape` can be either `Rectangle` or `Circle` (with `Shape` as base class). Then calling e.g. `Shape::Rectangle.collision_with(?)` directs to the correct method in `Shape` to handle the collision.
 - **Factory Pattern:**
-  - Handle of shape collisions in Pyshics engine (TODO)
-
-## Unsure
-- Creation (using `new`) and deletion (using `delete`) of matter, collision boxes and graphics.
+  - Handle of shape collisions in Pyshics engine.
 
 ## TODO
 - Improve circle drawing algorithm to use Bresenham.
-- Write `step` function for `matter` so that photons don't need to do a gravity calculation.
-- Remove photons that are too far away from the origin.
 - Add strategic comments.
 
 ## Improvements from previous Universe Simulation
