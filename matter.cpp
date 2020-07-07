@@ -1,30 +1,19 @@
 #include "matter.hpp"
 
-void Matter::add_graphic(Renderer::Graphic *graphic){
-    this->graphic = graphic->clone();
-};
-
 Body::Body(double mass, Vec3<double> pos, Vec3<double> speed, double radius)
     : Matter(mass, pos, speed)
 {
     collision_box = std::make_unique<Physics::Circle>(radius);
-
-    Renderer::Circle *g = new Renderer::Circle(radius, Renderer::Colour(0, 255, 0, 255));
-    add_graphic(g);
-    delete g;
+    graphic = std::make_unique<Renderer::Circle> (radius, Renderer::Colour(0, 255, 0, 255));
 }
 
-Photon::Photon(Vec3<double> p, Vec3<double> dir)
+Photon::Photon(Vec3<double> pos, Vec3<double> dir)
+    : Matter(mass, pos, dir * Physics::c)
 {
-    pos = p;
-    mass = 0;
     affected_by_gravity = false;    // Not in the Newtonian way
-    speed = dir * Physics::c;
-    collision_box = std::make_unique<Physics::Circle>(0.1);
-
-    Renderer::Circle *g = new Renderer::Circle(1.0, Renderer::Colour(255, 255, 255, 255));
-    add_graphic(g);
-    delete g;
+    collision_box = std::make_unique<Physics::Rectangle>(0.1, 0.1); // Square to be quicker.
+                    // And it's 0.1m big (!), but it can't be zero. Scale makes this negilable.
+    graphic = std::make_unique<Renderer::Rectangle> (0, 0, Renderer::Colour(255, 255, 255, 255));   // Square to be quicker
 }
 
 bool Photon::clear_if_outside_boundary(Vec3<double> minimum, Vec3<double> maximum){

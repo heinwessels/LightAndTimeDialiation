@@ -20,7 +20,7 @@ public:
     void run();
 
     Controller(){};
-    ~Controller();
+    ~Controller(){};
 private:
 
     double simulation_speed = 0.1;          // In simulated seconds per second
@@ -31,8 +31,9 @@ private:
 
     enum State {idle, running, single_step, exit};
     State state = running;
-    Renderer *renderer;
-    Universe *universe;
+
+    std::unique_ptr<Renderer> renderer;
+    std::unique_ptr<Universe> universe;
 
     void handle_input();
     void draw_information(double meas_sim_speed, double sim_time_step, double meas_fps, double sim_time_passed, double meas_render_time);

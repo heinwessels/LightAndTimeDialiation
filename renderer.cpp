@@ -24,10 +24,11 @@ void Renderer::show_screen(){
 
 void Renderer::draw_filled_rectangle(SDL_Renderer *renderer, float x, float y, float width, float height, Colour colour){
     SDL_Rect rect;
-    rect.x = (int) (x - width / 2.0);
-    rect.y = (int) (y - height / 2.0);
-    rect.w = (int) width;
-    rect.h = (int) height;
+    // The ceiling and minimum width/height of 1 is to ensure that at least a pixel is drawn.
+    rect.x = (int) ceil(x - width / 2.0);
+    rect.y = (int) ceil(y - height / 2.0);
+    rect.w = (int) width > 1 ? width : 1;
+    rect.h = (int) height > 1 ? height : 1;
     SDL_SetRenderDrawColor(renderer, colour.r, colour.g, colour.b, colour.a);
     SDL_RenderFillRect(renderer, &rect);
 }

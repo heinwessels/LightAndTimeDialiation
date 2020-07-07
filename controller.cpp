@@ -4,11 +4,11 @@
 void Controller::init(){
 
     // Setup Renderer
-    renderer = new Renderer();
+    renderer = std::make_unique<Renderer>();
     renderer->init_window();
 
     // Create Universe
-    universe = new Universe(*renderer);
+    universe = std::make_unique<Universe>(*renderer);
 
     // Create Earth
     auto earth = std::make_unique<Body>(
@@ -33,11 +33,6 @@ void Controller::init(){
     universe->observer.ref_pos = new Vec3<double>(0);
     universe->observer.speed = new Vec3<double>(0);
     universe->observer.ref_scale = (double)renderer->screen_width / (384400000 * 3);
-}
-
-Controller::~Controller(){
-    delete universe;
-    delete renderer;
 }
 
 void Controller::run(){

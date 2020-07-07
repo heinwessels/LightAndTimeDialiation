@@ -25,21 +25,18 @@ public:
         virtual ~Graphic(){};
         Colour colour;
         virtual void draw(SDL_Renderer *renderer, int x, int y, float scaling){};
-        virtual Graphic *clone() const = 0;
     };
     class Rectangle : public Graphic{
     public:
         float width, height;
         Rectangle(float w, float h, Colour c) : width(w), height(h) {colour = c;};
         virtual void draw(SDL_Renderer *renderer, int x, int y, float scaling);
-        virtual Rectangle *clone() const {return new Rectangle(*this);};
     };
     class Circle : public Graphic{
     public:
         float radius;
         Circle(float r, Colour c) : radius (r) {colour = c;};
         virtual void draw(SDL_Renderer *renderer, int x, int y, float scaling);
-        virtual Circle *clone() const {return new Circle(*this);};
     };
 
     ~Renderer();

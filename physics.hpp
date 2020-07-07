@@ -18,7 +18,6 @@ public:
     public:
         virtual ~CollisionBox() {}
         virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox *other_box) = 0;
-        virtual CollisionBox *clone() const = 0;
 
     };
     class Rectangle: public CollisionBox{
@@ -26,14 +25,12 @@ public:
         double width, height;
         Rectangle(double w, double h) : width(w), height(h) {};
         virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox *other_box);
-        virtual Rectangle *clone() const {return new Rectangle(*this);};
     };
     class Circle: public CollisionBox{
     public:
         double radius;
         Circle(double r) : radius (r) {};
         virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox *other_box);
-        virtual Circle *clone() const {return new Circle(*this);};
     };
     class CollisionHandler{
     public:
