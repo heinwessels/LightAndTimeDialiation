@@ -78,8 +78,21 @@ void Controller::run(){
 
             number_of_sim_steps++;
         }
-        // Average time it took to simualate a single step
+
+        // Remove all matter (currently only photons) outside screen boundary
+        universe->clear_matter_outside_boundary(
+            universe->observer.get_universe_pos_from_screen(Vec3<double>(
+                0, 0, 0
+            )),
+            universe->observer.get_universe_pos_from_screen(Vec3<double>(
+                renderer->screen_width, renderer->screen_height, 0
+            ))
+        );
+
+        // Approximate average time it took to simualate a single step
         time_to_simulate_single_step = (clock::now() - time_loop_start) / number_of_sim_steps;
+
+
 
         // Handle Rendering
         // --------------------------------------------------

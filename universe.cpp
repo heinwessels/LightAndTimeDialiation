@@ -3,7 +3,7 @@
 void Universe::add_matter(std::unique_ptr<Matter> m){
     // Passing <unique_ptr> by value to transfer ownership.
     // Use: Base add_matter(std::move(m));
-    //      Base add_matter(std::unique_ptr<Matter>(new Matter(...));
+    //      Base add_matter(std::make_unique<Matter>(new Matter(...));
     matter.push_back(std::move(m)); // Change the owenership from <m> to <matter>
 }
 
@@ -35,7 +35,6 @@ void Universe::handle_forces(double time){
         // Step this piece of matter in time
         matter[i]->step(time);
     }
-
 }
 
 void Universe::handle_collisions(){
@@ -81,11 +80,22 @@ void Universe::handle_collisions(){
     }   // End of <i> loop
 }
 
-void Universe::clear_light_outside_boundary(
+void Universe::clear_matter_outside_boundary(
     Vec3<double> mininum,
     Vec3<double> maximum
 ){
+    // Destroy matter outside certain boundary, if they allow it
 
+    int i;
+    while (i < matter.size()){
+        if (matter[i]->clear_if_outside_boundary(mininum, maximum)){
+            // Allowed to destroy, and outside boundary
+            matter.erase (matter.begin() + i);
+        }
+        else{
+            i++;
+        }
+    }
 }
 
 void Universe::emit_light_from_point(

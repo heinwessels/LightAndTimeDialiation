@@ -4,10 +4,6 @@ void Matter::add_graphic(Renderer::Graphic *graphic){
     this->graphic = graphic->clone();
 };
 
-Matter::~Matter(){
-    delete this->graphic;
-}
-
 Body::Body(double mass, Vec3<double> pos, Vec3<double> speed, double radius)
     : Matter(mass, pos, speed)
 {
@@ -29,6 +25,12 @@ Photon::Photon(Vec3<double> p, Vec3<double> dir)
     Renderer::Circle *g = new Renderer::Circle(1.0, Renderer::Colour(255, 255, 255, 255));
     add_graphic(g);
     delete g;
+}
+
+bool Photon::clear_if_outside_boundary(Vec3<double> minimum, Vec3<double> maximum){
+    // Photons can be cleared if outside a certain boundary
+    return  (minimum.x > pos.x || pos.x > maximum.x) ||
+            (minimum.y > pos.y || pos.y > maximum.y);
 }
 
 bool Matter::collision_with(Matter * other){

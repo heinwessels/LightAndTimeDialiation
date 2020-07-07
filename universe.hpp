@@ -22,8 +22,8 @@ class Universe{
         float zoom = 1;
         Observer(int screen_width, int screen_height) : screen_size (screen_width, screen_width, 0) {};
         Vec3<double> get_screen_position(Vec3<double> pos){return pos * (ref_scale * zoom) + screen_size / 2 + cam_pos*zoom;}
-        double get_scale_factor(){return ref_scale * zoom;}
         Vec3<double> get_universe_pos_from_screen(Vec3<double> pos){return (pos - cam_pos * zoom - screen_size / 2) / (ref_scale * zoom);}
+        double get_scale_factor(){return ref_scale * zoom;}
     };
     Observer observer;
 
@@ -33,7 +33,7 @@ class Universe{
     void draw();
 
     void add_matter(std::unique_ptr<Matter> matter);
-    void clear_light_outside_boundary(Vec3<double> mininum, Vec3<double> maximum);
+    void clear_matter_outside_boundary(Vec3<double> mininum, Vec3<double> maximum);
     void emit_light_from_point(Vec3<double> pos, double offset_radius, double amount);
 
     int get_num_of_matter(){return matter.size();}

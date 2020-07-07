@@ -1,8 +1,8 @@
 #include "physics.hpp"
 
 bool Physics::CollisionHandler::collision_between_rectangle_and_rectangle(
-    Vec3<double> rect1_pos, Physics::Rectangle &rect1,
-    Vec3<double> rect2_pos, Physics::Rectangle &rect2
+    Vec3<double> rect1_pos, const Physics::Rectangle &rect1,
+    Vec3<double> rect2_pos, const Physics::Rectangle &rect2
 ){
     return  (rect1_pos.x - rect1.width / 2 )     < (rect2_pos.x + rect2.width / 2) &&
             (rect1_pos.x + rect1.width / 2 )     > (rect2_pos.x - rect2.width / 2) &&
@@ -10,8 +10,8 @@ bool Physics::CollisionHandler::collision_between_rectangle_and_rectangle(
             (rect1_pos.y + rect1.height / 2 )    > (rect2_pos.y - rect2.height / 2);
 }
 bool Physics::CollisionHandler::collision_between_rectangle_and_circle(
-    Vec3<double> rect_pos, Physics::Rectangle &rect,
-    Vec3<double> circ_pos, Physics::Circle &circ
+    Vec3<double> rect_pos, const Physics::Rectangle &rect,
+    Vec3<double> circ_pos, const Physics::Circle &circ
 ){
     double  dx = abs(circ_pos.x - rect_pos.x) - rect.width / 2,
             dy = abs(circ_pos.y - rect_pos.y) - rect.height / 2;
@@ -20,8 +20,8 @@ bool Physics::CollisionHandler::collision_between_rectangle_and_circle(
     return (dx * dx + dy * dy <= circ.radius * circ.radius);
 }
 bool Physics::CollisionHandler::collision_between_circle_and_circle(
-    Vec3<double> circ1_pos, Physics::Circle &circ1,
-    Vec3<double> circ2_pos, Physics::Circle &circ2
+    Vec3<double> circ1_pos, const Physics::Circle &circ1,
+    Vec3<double> circ2_pos, const Physics::Circle &circ2
 ){
     return (circ1_pos.x-circ2_pos.x)*(circ1_pos.x-circ2_pos.x) + (circ1_pos.y-circ2_pos.y)*(circ1_pos.y-circ2_pos.y)
             < (circ1.radius + circ2.radius)*(circ1.radius + circ2.radius);

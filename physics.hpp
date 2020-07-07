@@ -37,9 +37,9 @@ public:
     };
     class CollisionHandler{
     public:
-        static bool collision_between_rectangle_and_rectangle(Vec3<double> rect1_pos, Physics::Rectangle &rect1, Vec3<double> rect2_pos, Physics::Rectangle &rect2);
-        static bool collision_between_rectangle_and_circle(Vec3<double> rect_pos, Physics::Rectangle &rect, Vec3<double> circ_pos, Physics::Circle &circ);
-        static bool collision_between_circle_and_circle(Vec3<double> circ1_pos, Physics::Circle &circ1, Vec3<double> circ2_pos, Physics::Circle &circ2);
+        static bool collision_between_rectangle_and_rectangle(Vec3<double> rect1_pos, const Physics::Rectangle &rect1, Vec3<double> rect2_pos, const Physics::Rectangle &rect2);
+        static bool collision_between_rectangle_and_circle(Vec3<double> rect_pos, const Physics::Rectangle &rect, Vec3<double> circ_pos, const Physics::Circle &circ);
+        static bool collision_between_circle_and_circle(Vec3<double> circ1_pos, const Physics::Circle &circ1, Vec3<double> circ2_pos, const Physics::Circle &circ2);
     };
 
     class Mass{
