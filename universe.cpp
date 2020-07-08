@@ -116,8 +116,6 @@ void Universe::emit_light_from_point(
 
 void Universe::draw(){
 
-    renderer->clear_screen();
-
     // First draw all matter
     for(int i = 0; i < matter.size(); i++){
 

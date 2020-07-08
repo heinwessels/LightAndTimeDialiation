@@ -92,6 +92,7 @@ void Controller::run(){
         // Handle Rendering
         // --------------------------------------------------
         const auto time_render_start = clock::now();
+        renderer->clear_screen();
         universe->draw();
         handle_input();
         draw_information(
