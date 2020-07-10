@@ -98,22 +98,6 @@ void Universe::clear_matter_outside_boundary(
     }
 }
 
-void Universe::emit_light_from_point(
-    Vec3<double> pos,
-    double offset_radius,
-    double amount
-){
-    for (double th = 0; th < 2*M_PI; th+=2*M_PI/amount){
-        Vec3<double> dir (cos(th), sin(th), 0);
-        add_matter(
-            std::make_unique<Photon>(
-                pos + dir * offset_radius,
-                dir
-            )
-        );
-    }
-}
-
 void Universe::draw(){
 
     // First draw all matter

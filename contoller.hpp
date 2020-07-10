@@ -23,7 +23,7 @@ public:
     ~Controller(){};
 private:
 
-    double simulation_speed = 0.1;          // In simulated seconds per second
+    double simulation_speed = 24*60*60;          // In simulated seconds per second
     static constexpr double time_step_max = 100.0;
     static constexpr double fps_limit = 30.0;
 

@@ -33,12 +33,4 @@ public:
     virtual bool clear_if_outside_boundary(Vec3<double> lower_left_corner, Vec3<double> upper_right_corner){return false;}
 };
 
-class Photon : public Matter{
-public:
-    Photon(Vec3<double> pos, Vec3<double> dir);
-    virtual ~Photon(){}
-    virtual bool collide_with_should_destroy(Matter *other);
-    virtual bool clear_if_outside_boundary(Vec3<double> lower_left_corner, Vec3<double> upper_right_corner);
-};
-
 #endif

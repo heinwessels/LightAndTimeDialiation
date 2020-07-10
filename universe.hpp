@@ -34,7 +34,6 @@ class Universe{
 
     void add_matter(std::unique_ptr<Matter> matter);
     void clear_matter_outside_boundary(Vec3<double> mininum, Vec3<double> maximum);
-    void emit_light_from_point(Vec3<double> pos, double offset_radius, double amount);
 
     int get_num_of_matter(){return matter.size();}
 

@@ -336,11 +336,7 @@ void Controller::handle_input(){
         }
 
         if (event.type == SDL_MOUSEBUTTONDOWN){
-            universe->emit_light_from_point(
-                universe->observer.get_universe_pos_from_screen(Vec3<double> (event.motion.x, event.motion.y, 0)),
-                1000.0,
-                10
-            );
+            // Nothing happens
         }
     }
 }
