@@ -23,7 +23,7 @@ void Controller::init(){
     auto moon = std::make_unique<Body>(
         (double)(7.35e22),
         Vec3<double> (384400000, 0, 0),
-        Vec3<double> (0, 1022, 0),
+        Vec3<double> (0, 0 /*1022*/, 0),
         1738100
     );
     moon->graphic->colour = Renderer::Colour(255, 255, 255, 255);

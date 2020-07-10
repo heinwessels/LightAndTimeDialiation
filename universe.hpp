@@ -7,6 +7,7 @@
 #include "matter.hpp"
 #include "renderer.hpp"
 
+class Matter;
 class Universe{
     public:
     Universe(Renderer &r) : renderer(&r), observer(r.screen_width, r.screen_height) {};
@@ -33,6 +34,7 @@ class Universe{
     void draw();
 
     void add_matter(std::unique_ptr<Matter> matter);
+
     void clear_matter_outside_boundary(Vec3<double> mininum, Vec3<double> maximum);
 
     int get_num_of_matter(){return matter.size();}

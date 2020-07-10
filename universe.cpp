@@ -46,29 +46,18 @@ void Universe::handle_collisions(){
         while (j < matter.size()){
 
             // Check for collision
-            if (matter[i]->collision_with(matter[j].get())){
+            if (matter[i]->check_collision_with(matter[j].get())){
 
-                // Need to do attempt destroy and destroy seperately, as it changes <matter>
-                bool should_destroy_i = matter[i]->collide_with_should_destroy(matter[j].get());
-                bool should_destroy_j = matter[j]->collide_with_should_destroy(matter[i].get());
+                // Handle possible combining
+                auto combined = matter[i]->combine_with(matter[j].get());
+                if (combined != NULL){
 
-                // Do destroying
-                if(should_destroy_i){
-                    matter.erase (matter.begin() + i);
-                }
-                if(should_destroy_j){
-                    matter.erase (matter.begin() + j - (should_destroy_i ? 1 : 0)); // If <i> was destroyed, the <j>'s index will be one less
-                }
-
-                // What happens next depends on what was destroyed
-                if (should_destroy_i){
-                    j = i + 1;      // Remember, the next <i> element basically moved to the current index after erase
-                }
-                else if(should_destroy_j){
-                    // Do nothing. <j> should stay the same, for the same reason why <i> remains the same for <erased_i>
+                    // Combine the to matter by overwriting index <i>, and deleting index <j>
+                    matter[i] = std::move(combined);
+                    matter.erase (matter.begin() + j);
                 }
                 else{
-                    j++;
+                    // Some other possible things
                 }
             }
             else{

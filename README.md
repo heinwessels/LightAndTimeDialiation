@@ -29,3 +29,4 @@ I designed the class structure using a UML diagram using LucidChart. I favoured 
 
 ## Improvements from previous Universe Simulation
 - Simulation speed per second is constant, e.g. `200 seconds per second`. If the processing takes too long it will increase the time step per calculation to reduce the number of calculations, instead of limiting the amount calculations with a fixed time step. This will decrease the accuracy *slightly*, but it's negligible. This is an improvement from trying to reach a specific number of updates per second with a fixed timestep, meaning when the processing is slow, the simulation is slow.
+- Now simulating density (TODO)
