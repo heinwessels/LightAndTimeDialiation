@@ -1,5 +1,5 @@
 # LightAndTimeDialiation
-This project will simulate the creation of a galaxy from a gas cloud. However, the **goal** is to learn more about C++ and OOP best practices, by rewriting a previous project called [UniverseSimulation](https://github.com/heinwessels/UniverseSimulator). The idea is to over-design everything to force the use of best practices that will typically be used for large commercial projects.
+This project will be a *very* simplified simulation of the creation of a galaxy or sun from a gas cloud. However, the **goal** is to learn more about C++ and OOP best practices, by rewriting a previous project called [UniverseSimulation](https://github.com/heinwessels/UniverseSimulator). The idea is to over-design everything to force the use of best practices that will typically be used for large commercial projects.
 
 ## Development Process
 The process I during the development of this project is as follows:

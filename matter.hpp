@@ -7,9 +7,7 @@
 #include "vec3.hpp"
 #include "renderer.hpp"
 #include "physics.hpp"
-#include "universe.hpp"
 
-class Universe;
 class Matter : public Physics::Mass{
 public:
 

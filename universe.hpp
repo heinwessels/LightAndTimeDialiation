@@ -7,7 +7,6 @@
 #include "matter.hpp"
 #include "renderer.hpp"
 
-class Matter;
 class Universe{
     public:
     Universe(Renderer &r) : renderer(&r), observer(r.screen_width, r.screen_height) {};
