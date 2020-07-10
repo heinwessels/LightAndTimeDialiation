@@ -58,6 +58,8 @@ void Universe::handle_collisions(){
                 }
                 else{
                     // Some other possible things
+
+                    j ++;
                 }
             }
             else{

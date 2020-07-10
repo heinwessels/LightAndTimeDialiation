@@ -10,29 +10,8 @@ void Controller::init(){
     // Create Universe
     universe = std::make_unique<Universe>(*renderer);
 
-    // Create Earth
-    auto earth = std::make_unique<Body>(
-        (double)(6e24),
-        Vec3<double> (0, 0, 0),
-        Vec3<double> (0, 0, 0),
-        6378100
-    );
-    universe->add_matter(std::move(earth)); // Move ownership from <earth> to function call
-
-    // Create Moon
-    auto moon = std::make_unique<Body>(
-        (double)(7.35e22),
-        Vec3<double> (384400000, 0, 0),
-        Vec3<double> (0, 0 /*1022*/, 0),
-        1738100
-    );
-    moon->graphic->colour = Renderer::Colour(255, 255, 255, 255);
-    universe->add_matter(std::move(moon));
-
-    // Setup Observer
-    universe->observer.ref_pos = new Vec3<double>(0);
-    universe->observer.speed = new Vec3<double>(0);
-    universe->observer.ref_scale = (double)renderer->screen_width / (384400000 * 3);
+    // Choose from templates
+    Template::sun_earth_moon(*universe);
 }
 
 void Controller::run(){
@@ -108,6 +87,82 @@ void Controller::run(){
         time_to_render = clock::now() - time_render_start;
     }
 }
+
+void Controller::handle_input(){
+    std::vector<SDL_Event> events = renderer->poll_events();
+    for (auto & event : events){
+
+        if( event.type == SDL_QUIT )
+        {
+            state = exit;
+        }
+
+        if (event.type == SDL_KEYDOWN){
+            if (event.key.keysym.sym == SDLK_SPACE){
+                if(state == idle)
+                    state = running;
+                else if(state == running)
+                    state = idle;
+            }
+            if (event.key.keysym.sym == SDLK_s){
+                state = single_step;
+            }
+            if(event.key.keysym.sym == SDLK_KP_PLUS){
+                // Zoom in
+                double step = pow(10,floor(log10(
+                    universe->observer.zoom + pow(10,floor(log10(universe->observer.zoom)) - 1)
+                ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
+                if (step > 0.1)
+                    step = 0.1;
+                universe->observer.zoom += step;
+            }
+            if(event.key.keysym.sym == SDLK_KP_MINUS){
+                // Zoom out
+                double step = pow(10,floor(log10(
+                    universe->observer.zoom - pow(10,floor(log10(universe->observer.zoom)) - 1)
+                ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
+                if (step > 0.1)
+                    step = 0.1;
+                universe->observer.zoom -= step;
+            }
+            if(event.key.keysym.sym == SDLK_PERIOD){
+                // Speed up simulation
+                double step = pow(10,floor(log10(
+                    simulation_speed + pow(10,floor(log10(simulation_speed)) - 1)
+                ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
+                simulation_speed += step;
+            }
+            if(event.key.keysym.sym == SDLK_COMMA){
+                // Slow down simulation
+                double step = pow(10,floor(log10(
+                    simulation_speed - pow(10,floor(log10(simulation_speed)) - 1)
+                ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
+                simulation_speed -= step;
+            }
+            if(event.key.keysym.sym == SDLK_LEFT){
+                // Move camera left
+                universe->observer.cam_pos.x ++;
+            }
+            if(event.key.keysym.sym == SDLK_RIGHT){
+                // Move camera right
+                universe->observer.cam_pos.x --;
+            }
+            if(event.key.keysym.sym == SDLK_UP){
+                // Move camera up
+                universe->observer.cam_pos.y ++;
+            }
+            if(event.key.keysym.sym == SDLK_DOWN){
+                // Move camera down
+                universe->observer.cam_pos.y --;
+            }
+        }
+
+        if (event.type == SDL_MOUSEBUTTONDOWN){
+            // Nothing happens
+        }
+    }
+}
+
 
 void Controller::draw_information(
     double meas_sim_speed,
@@ -264,79 +319,4 @@ std::string Controller::seconds_to_time_string(std::string pre, double seconds, 
     }
 
     return pre + std::string(text) + post;
-}
-
-void Controller::handle_input(){
-    std::vector<SDL_Event> events = renderer->poll_events();
-    for (auto & event : events){
-
-        if( event.type == SDL_QUIT )
-        {
-            state = exit;
-        }
-
-        if (event.type == SDL_KEYDOWN){
-            if (event.key.keysym.sym == SDLK_SPACE){
-                if(state == idle)
-                    state = running;
-                else if(state == running)
-                    state = idle;
-            }
-            if (event.key.keysym.sym == SDLK_s){
-                state = single_step;
-            }
-            if(event.key.keysym.sym == SDLK_KP_PLUS){
-                // Zoom in
-                double step = pow(10,floor(log10(
-                    universe->observer.zoom + pow(10,floor(log10(universe->observer.zoom)) - 1)
-                ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
-                if (step > 0.1)
-                    step = 0.1;
-                universe->observer.zoom += step;
-            }
-            if(event.key.keysym.sym == SDLK_KP_MINUS){
-                // Zoom out
-                double step = pow(10,floor(log10(
-                    universe->observer.zoom - pow(10,floor(log10(universe->observer.zoom)) - 1)
-                ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
-                if (step > 0.1)
-                    step = 0.1;
-                universe->observer.zoom -= step;
-            }
-            if(event.key.keysym.sym == SDLK_PERIOD){
-                // Speed up simulation
-                double step = pow(10,floor(log10(
-                    simulation_speed + pow(10,floor(log10(simulation_speed)) - 1)
-                ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
-                simulation_speed += step;
-            }
-            if(event.key.keysym.sym == SDLK_COMMA){
-                // Slow down simulation
-                double step = pow(10,floor(log10(
-                    simulation_speed - pow(10,floor(log10(simulation_speed)) - 1)
-                ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
-                simulation_speed -= step;
-            }
-            if(event.key.keysym.sym == SDLK_LEFT){
-                // Move camera left
-                universe->observer.cam_pos.x ++;
-            }
-            if(event.key.keysym.sym == SDLK_RIGHT){
-                // Move camera right
-                universe->observer.cam_pos.x --;
-            }
-            if(event.key.keysym.sym == SDLK_UP){
-                // Move camera up
-                universe->observer.cam_pos.y ++;
-            }
-            if(event.key.keysym.sym == SDLK_DOWN){
-                // Move camera down
-                universe->observer.cam_pos.y --;
-            }
-        }
-
-        if (event.type == SDL_MOUSEBUTTONDOWN){
-            // Nothing happens
-        }
-    }
 }

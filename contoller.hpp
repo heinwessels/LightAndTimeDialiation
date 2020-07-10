@@ -13,6 +13,7 @@
 #include "universe.hpp"
 #include "renderer.hpp"
 #include "matter.hpp"
+#include "universe_template.hpp"
 
 class Controller{
 public:
@@ -30,7 +31,7 @@ private:
     bool hide_ui = false;
 
     enum State {idle, running, single_step, exit};
-    State state = running;
+    State state = idle;
 
     std::unique_ptr<Renderer> renderer;
     std::unique_ptr<Universe> universe;

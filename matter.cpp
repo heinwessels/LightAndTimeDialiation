@@ -29,9 +29,9 @@ std::unique_ptr<Matter> Body::combine_with(Matter * other){
         auto new_speed = (this->speed * this->mass + other->speed * other->mass)
                             / (this->mass + other->mass);
 
-        // Calculate the new radius adding the area's of the two bodies
-        double new_radius = sqrt(this->radius * this->radius + other_body->radius * other_body->radius);
+        // Calculate the new radius adding through the adapted density from the combined mass
         double new_mass = this->mass + other->mass;
+        double new_radius = get_radius_based_on_mass(new_mass);
 
         return std::make_unique<Body>(
             new_mass, new_pos, new_speed, new_radius
@@ -41,4 +41,21 @@ std::unique_ptr<Matter> Body::combine_with(Matter * other){
         // Don't know how to handle this collision
         return NULL;
     }
+}
+
+double Body::get_radius_based_on_mass(double mass){
+    // This will questimate a nebula low density relative to stars' high density.
+    // We will not use real values, but rather reverse calculate it in 3D
+
+    const double top_radius = 695700000;    // [m]      Radius of the sun
+    const double top_mass = 1.9884e30;      // [kg]     The mass of the sun
+    const double bottom_radius = 1e5;       // [m]      Thumbsucking is the way of the engineer
+    const double bottom_mass = 1e5;         // [kg]     This is a wild guess
+
+
+    // Now interpolate between these two values
+    return  (mass - top_mass)
+                * (top_radius - bottom_radius) / (top_mass - bottom_mass)
+                + bottom_radius;
+
 }
