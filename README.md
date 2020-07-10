@@ -42,19 +42,52 @@ Around heavy objects light will arguably do two things. It will **bend**, and it
 
 Bending *space* means that the fabric of our universe is bent. An easy example of this is the recent famous picture of the black hole [Messier 87](https://en.wikipedia.org/wiki/File:Black_hole_-_Messier_87_crop_max_res.jpg). In this picure you can see the *other side* of the blackhole, even though light always travels in a straight line. This is because the intense gravity of the black hole actually *bends* the fabric of space around it, so although the light travels in a straight line, seems to go *around* the black hole. For reference, this effect cannot be explained by Newton's Gravitational Law, since photons have zero mass, which creates a zero force.
 
-But according to General Relativity our universe has 4 dimentions, so it includes time! So if space is bent, then *time* will bent as well. And bending time means you change the *rate* of passing of time. This means for a distant observer, it will apear that light moves slower close to heavy objects, even though light always travel at the speed of light. What happens is that the light *is* travelling at the speed of light, but *time* passes more slowly in the vicinity of that light relative to the distant obeserver, which will make it *seem* like the light is travelling slower. A simple example of this is called the [Shapiro Time Delay](https://en.wikipedia.org/wiki/Shapiro_time_delay).
+But according to General Relativity our universe has 4 dimentions, so it includes time! So if space is bent, then *time* will bent as well. And bending time means you change the *rate* of passing of time. This means for a distant observer, it will apear that light moves slower close to heavy objects, even though light always travel at the constant speed of light. What really happens is that the light *is* travelling at the speed of light, but *time* passes more slowly in the vicinity of that light relative to the distant obeserver, which will make it *seem* like the light is travelling slower. A simple example of this is called the [Shapiro Time Delay](https://en.wikipedia.org/wiki/Shapiro_time_delay).
 
-No, it just takes longer to move since there is more distance?
+### Calculating Bending of Space Time
+In order to calculate how far light will bend and slow down near a heavy object we need to know the curvature of space-time at that location. A rough translation to Newtonian physics is calculating the intensity of gravity, called the gravitational potential (`V`), at that point, with:
+<p align="center">
+    <img src="https://render.githubusercontent.com/render/math?math=V = { {GM} \over r}">
+</p>
 
-### Accurate Simulation
+In order to calculate this accurately we will have to use General Relativity, or more specifically, Einstein's famous Field Equation:
+<p align="center">
+    <img src="https://render.githubusercontent.com/render/math?math=G_{\mu\nu}\equiv R_{\mu\nu} - {\textstyle 1 \over 2}R\,g_{\mu\nu} = {{8 \pi G} \over c^4} T_{\mu\nu}">
+</p>
 
+The important aspect that we will require is the [metric tensor](https://en.wikipedia.org/wiki/Metric_tensor_(general_relativity)) (`g`), which roughly translates to Newton's gravitational potential. From this will be able to calculate the curvature of space-time, and so, how light will act moving through it. However, calculating the metric tensor is not a simple task, and get's very complicated very quickly. See [this](https://physics.stackexchange.com/questions/450470/how-can-one-obtain-the-metric-tensor-numerically) Stack Overflow answer to see why I decided it's out of scope for this project. Instead we will do what engineers do, approximate.
 
 ### Approximation
 
-Gravitional lens
+Since the Field Equation is so complex, approximations have been developed to help in *easy* use cases. This can be for example calculating Mercury's orbit around the sun (which does not follow's Kepler Orbit). These approximations hold only true with the following conditions :
+- the objects aren't too heavy (e.g. not close to black holes)
+- they are not moving anywhere close to the speed of light
+- they are very far apart relative to their [Schwarzschild radius](https://en.wikipedia.org/wiki/Schwarzschild_radius), which for the Earth is about 9mm, and for our sun about 3km.
 
-- Light is affected by gravity even though it has **zero mass**! A thought experiment called the Equivalence Principle reasons why this can be observed [here](https://astronomy.stackexchange.com/questions/29122/if-light-has-no-mass-why-is-it-affected-by-gravity). Einstein considered this experiment as his *Happiest Thought*. What really happens is that gravity bends *space time*, and light is traveling in a straight line on that bent path. There
+The time dialation caused by gravity can be expressed with the following formula:
 
+<p align="center">
+    <img src="https://render.githubusercontent.com/render/math?math=\frac{d \tau_{\rm A}}{d\tau_{\rm B}} \simeq \sqrt{1 - \frac{1}{c^2}\sum_k\frac{GM_k}{r_k}}">
+</p>
+
+This answer (`dtA/dtB`) will be an approximate factor by which time will be slowed when a point in space is affected by `k` masses. If the 3 conditions mentioned above are true, this factor should stay close to 1.
+
+To calculate the bending of light due to gravity
+
+<p align="center">
+    <img src="https://render.githubusercontent.com/render/math?math=\theta = \frac{4GM}{rc^2}">
+</p>
+
+
+
+However, being the creator of *this* simulated universe, I will push these formulas to the limits.
+
+
+
+
+### Things I use
+
+I'm using relativilistic newton dynamics
 
 Approximation at r >> schwartzchild radii and factor close to 1
 https://astronomy.stackexchange.com/questions/14367/gravitational-time-dilation-multiple-sources
