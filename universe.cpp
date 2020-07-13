@@ -8,9 +8,8 @@ void Universe::add_matter(std::unique_ptr<Matter> m){
 }
 
 void Universe::step(double time){
-
+    handle_collisions();    // Do first, otherwise could have matter on top of each other giving insance forces
     handle_forces(time);
-    handle_collisions();
 }
 
 void Universe::handle_forces(double time){

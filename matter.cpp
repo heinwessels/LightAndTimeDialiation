@@ -33,6 +33,11 @@ std::unique_ptr<Matter> Body::combine_with(Matter * other){
         double new_mass = this->mass + other->mass;
         double new_radius = get_radius_based_on_mass(new_mass);
 
+        printf("Density: %.3f to %.3f\n",
+            this->mass / (4*M_PI/3 * this->radius*this->radius*this->radius),
+            new_mass / (4*M_PI/3 * new_radius*new_radius*new_radius)
+        );
+
         return std::make_unique<Body>(
             new_mass, new_pos, new_speed, new_radius
         );
@@ -44,18 +49,27 @@ std::unique_ptr<Matter> Body::combine_with(Matter * other){
 }
 
 double Body::get_radius_based_on_mass(double mass){
-    // This will questimate a nebula low density relative to stars' high density.
+    // This will questimate a gas cloud's low density relative to a earth's high density.
     // We will not use real values, but rather reverse calculate it in 3D
 
-    const double top_radius = 695700000;    // [m]      Radius of the sun
-    const double top_mass = 1.9884e30;      // [kg]     The mass of the sun
-    const double bottom_radius = 1e5;       // [m]      Thumbsucking is the way of the engineer
-    const double bottom_mass = 1e5;         // [kg]     This is a wild guess
+    const double top_density = 5514;        // Average Density of earth [kg/m^3]
+    const double top_mass = 6e24;           // The mass of the earth [kg]
+    // Interesting, first used sun, but Earth is denser than the Sun.
+    // I'm implementing bad physics.
 
+    const double bottom_density = 3000.0;   // Some density of gas clouds
+    const double bottom_mass = 1e15;        // When they weight this
 
-    // Now interpolate between these two values
-    return  (mass - top_mass)
-                * (top_radius - bottom_radius) / (top_mass - bottom_mass)
-                + bottom_radius;
+    double density = (mass - bottom_mass)
+                * (top_density - bottom_density) / (top_mass - bottom_mass)
+                + bottom_density;
 
+    // Override this for now. Using volume instead of area make a big difference in size.
+    density = top_density;
+
+    // Now get radius from density and mass for sphere
+    return pow(
+        mass / (4.0*M_PI/3.0 * density),
+        1.0/3.0
+    );
 }

@@ -11,7 +11,8 @@ void Controller::init(){
     universe = std::make_unique<Universe>(*renderer);
 
     // Choose from templates
-    Template::sun_earth_moon(*universe);
+    // Template::sun_earth_moon(*universe);
+    Template::gas_cloud(*universe);
 }
 
 void Controller::run(){

@@ -46,8 +46,11 @@ void Template::sun_earth_moon(Universe &universe){
 
 void Template::gas_cloud(Universe &universe){
 
-    int gseed = 5;
-    int scale = 695700000*3;
+    uint32_t gseed = 555;
+    double x_start = -2e9, x_end = 2e9;
+    double y_start = -2e9, y_end = 2e9;
+
+    double scale = 5e9;
 
     srand(gseed);
 
@@ -65,58 +68,57 @@ void Template::gas_cloud(Universe &universe){
     const double size_fy = scale / size_frequency;
 
     double speed_frequency = 3;
-    double speed_octaves = 3;
+    double speed_octaves = 4;
     const siv::PerlinNoise speed_perlin(gseed + 5);
     const double speed_fx = scale / speed_frequency;
     const double speed_fy = scale / speed_frequency;
 
-    double density = 0.05;
-    double minimim_mass = 1;
-    double maximum_mass = 4;
-    double spacing_multiplier = 7;
-    double speed_multiplier = 100;
+    double minimim_mass = 1e15;
+    double maximum_mass = 5e25;
+    double spacing_multiplier = 5e0;
+    double speed_multiplier = 1e4;
 
-    double x_start = -1000, x_end = 2000;
-    double y_start = -1000, y_end = 2000;
     double x = x_start, y = y_start;
+    double max_radius = 0;
     while (y < y_end){
 
         double mass_randomizer = size_perlin.normalizedOctaveNoise2D(x / size_fx, y / size_fy, size_octaves);
-        double mass = (mass_randomizer + 1) * maximum_mass / 2;
+        double mass = minimim_mass + (mass_randomizer*5)* maximum_mass;
         double radius = Body::get_radius_based_on_mass(mass);
 
-
-        if (mass > minimim_mass && mass_randomizer > 0){
-
-            // Im here.
-
-            Body body (
-                M_PI*radius*radius*density,
-                radius,
-                Vec3<float>(x, y, 0));
+        if (radius > max_radius){max_radius = radius;}
+        if (mass > minimim_mass && mass_randomizer > 0 && radius > 0){
 
             double speed_randomizer = speed_perlin.normalizedOctaveNoise2D(x / speed_fx, y / speed_fy, speed_octaves) / 0.1;
-            // double speed_randomizer = (rand()%200)/100.0 - 1.0;
-            body.speed = Vec3<float>(
-                sin(speed_randomizer * M_PI * 2) * size_randomizer * speed_multiplier,
-                cos(speed_randomizer * M_PI * 2) * size_randomizer * speed_multiplier,
-                0
-            );
-
-            bodies[num_of_bodies++] = body;
-
-            // printf("[%d, %d]:\n\tRadius: %.3f\n\tSpeed Rand: %.3f\n", x, y, radius, speed_randomizer);
+            universe.add_matter(std::make_unique<Body>(
+                mass,
+                Vec3<double> (x, y, 0),
+                Vec3<double>(
+                    sin(speed_randomizer * M_PI * 2) * mass_randomizer * speed_multiplier,
+                    cos(speed_randomizer * M_PI * 2) * mass_randomizer * speed_multiplier,
+                    0
+                ),
+                radius
+            ));
 
         }
         else
         {
-            radius = minimim_mass;
+            radius = Body::get_radius_based_on_mass(maximum_mass);
         }
 
         x += spacing_multiplier * radius;
         if(x >= x_end){
             x = x_start;
-            y += radius * spacing_multiplier;
+            y += max_radius * spacing_multiplier;
+            max_radius = 0;
+
+            printf("Building: %.2f %%\t\t Number of bodies: %d\n", (y-y_start)/(y_end-y_start) * 100, universe.get_num_of_matter());
         }
     }
+
+    // Setup Observer
+    universe.observer.ref_pos = new Vec3<double>(0);
+    universe.observer.speed = new Vec3<double>(0);
+    universe.observer.ref_scale = (double)universe.observer.screen_size.x / (x_end - x_start);
 }
