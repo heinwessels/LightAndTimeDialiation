@@ -20,12 +20,15 @@ I designed the class structure using a UML diagram using LucidChart. I favoured 
 - There's little reason to use raw arrays. A container, e.g. `std::vector`, is just as efficient if used correctly, and has some powerful capabilities.
 - Favour *composition* over *inheritance*. This makes the code more modular and future proof. However, *inheritance* still has it's benifits, such as readability.
 - With derived classes `virtual` functions are very powerful and can make polymorhism very easy, intuitive and readable.
+- A `dynamic_cast` is very slow.
 - Ideally base classes should not know about their derived classes, and the derived classes should not know about each other. This was hard to implement for `CollisionBox` and isn't perfect (they know a little), but was made easier by using a *Factory Pattern* and implementing a `CollisionHandler`.
 
 ## TODO
+- Remove `dynamic_cast` in collision detection. Change to `Separating Axis Theorem`?
+- Fix processing loop during idle times.
 - Improve circle drawing algorithm to use Bresenham, if it's an issue in speed.
 - Remove dependency between `Universe` and `Renderer`.
-- Add cool physics.
+
 
 ## Improvements from previous Universe Simulation
 - Simulation speed per second is constant, e.g. `200 seconds per second`. If the processing takes too long it will increase the time step per calculation to reduce the number of calculations, instead of limiting the amount calculations with a fixed time step. This will decrease the accuracy *slightly*, but it's negligible. This is an improvement from trying to reach a specific number of updates per second with a fixed timestep, meaning when the processing is slow, the simulation is slow.

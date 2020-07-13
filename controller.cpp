@@ -36,38 +36,29 @@ void Controller::run(){
         sec time_left_to_sim = sec(1.0 / fps_limit) - time_to_render;
         double time_step = simulation_speed * time_to_simulate_single_step.count();
         time_step = time_step < time_step_max ? time_step : time_step_max;
-        while(time_left_to_sim > time_to_simulate_single_step || !number_of_sim_steps){
+        if (state == single_step){time_step = time_step_max;}   // Otherwise single steps are too slow
+        if (state == single_step || state == running){
+            while(time_left_to_sim > time_to_simulate_single_step || !number_of_sim_steps){
 
-            if (state == running || state == single_step){
-
+                // Step the universe!
                 universe->step(time_step);
                 sim_time_passed += time_step;
 
-                if (state == single_step)
-                    state = idle;
+                // Calculate the amount of time we can still use to simulate
+                time_left_to_sim = (time_per_frame - time_to_render)
+                                    - (clock::now() - time_loop_start);
+
+                number_of_sim_steps++;
             }
-
-            // Calculate the amount of time we can still use to simulate
-            time_left_to_sim = (time_per_frame - time_to_render)
-                                - (clock::now() - time_loop_start);
-
-            number_of_sim_steps++;
         }
 
-        // Remove all matter (currently only photons) outside screen boundary
-        universe->clear_matter_outside_boundary(
-            universe->observer.get_universe_pos_from_screen(Vec3<double>(
-                0, 0, 0
-            )),
-            universe->observer.get_universe_pos_from_screen(Vec3<double>(
-                renderer->screen_width, renderer->screen_height, 0
-            ))
-        );
-
-        // Approximate average time it took to simualate a single step
-        time_to_simulate_single_step = (clock::now() - time_loop_start) / number_of_sim_steps;
-
-
+        // Approximate average time it took to simualate a step (if any were made)
+        if (number_of_sim_steps){
+            time_to_simulate_single_step = (clock::now() - time_loop_start) / number_of_sim_steps;
+        }
+        else{
+            time_to_simulate_single_step = sec(0);
+        }
 
         // Handle Rendering
         // --------------------------------------------------
