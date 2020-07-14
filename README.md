@@ -20,7 +20,8 @@ I designed the class structure using a UML diagram using LucidChart. I favoured 
 - There's little reason to use raw arrays. A container, e.g. `std::vector`, is just as efficient if used correctly, and has some powerful capabilities.
 - Favour *composition* over *inheritance*. This makes the code more modular and future proof. However, *inheritance* still has it's benifits, such as readability.
 - With derived classes `virtual` functions are very powerful and can make polymorhism very easy, intuitive and readable.
-- A `dynamic_cast` is very slow.
+- A `dynamic_cast` is very slow and should be avoided where possible. Rather use other methods to determine if a derived class is of certain type.
+- Similarly, `std::unique_ptr::get()` is also very slow. This was an issue when calling a function with a polymorphic `unique_ptr` as argument. The `unique_ptr` itself can't be used, so instead `unique_ptr.get()` was used, but this proved very slow. Therefore, the argument was changed from pointer to reference, and now only `*unique_ptr` has to be used. This proved much quicker on `kcachegrind`.
 - Ideally base classes should not know about their derived classes, and the derived classes should not know about each other. This was hard to implement for `CollisionBox` and isn't perfect (they know a little), but was made easier by using a *Factory Pattern* and implementing a `CollisionHandler`.
 
 ## TODO

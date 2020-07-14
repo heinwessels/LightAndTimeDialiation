@@ -20,23 +20,23 @@ public:
         Type type;
         CollisionBox(Type type) : type(type) {}
         virtual ~CollisionBox() {}
-        virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox *other_box) = 0;
+        virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox const &other_box) = 0;
 
-        bool is_circle(){return type==circle;}
-        bool is_rectangle(){return type==rectangle;}
+        bool is_circle() const {return type==circle;}
+        bool is_rectangle() const {return type==rectangle;}
 
     };
     class Rectangle: public CollisionBox{
     public:
         double width, height;
         Rectangle(double w, double h) : width(w), height(h), CollisionBox(rectangle) {};
-        virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox *other_box);
+        virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox const &other_box);
     };
     class Circle: public CollisionBox{
     public:
         double radius;
         Circle(double r) : radius (r), CollisionBox(circle) {};
-        virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox *other_box);
+        virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox const &other_box);
     };
     class CollisionHandler{
     public:

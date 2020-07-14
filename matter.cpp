@@ -7,11 +7,11 @@ Body::Body(double mass, Vec3<double> pos, Vec3<double> speed, double radius)
     graphic = std::make_unique<Renderer::Circle> (radius, Renderer::Colour(0, 255, 0, 255));
 }
 
-bool Matter::check_collision_with(Matter * other){
+bool Matter::check_collision_with(Matter const &other){
     return this->collision_box->collision_with(
         this->pos,
-        other->pos,
-        other->collision_box.get()
+        other.pos,
+        *other.collision_box
     );
 }
 
@@ -32,11 +32,6 @@ std::unique_ptr<Matter> Body::combine_with(Matter * other){
         // Calculate the new radius adding through the adapted density from the combined mass
         double new_mass = this->mass + other->mass;
         double new_radius = get_radius_based_on_mass(new_mass);
-
-        printf("Density: %.3f to %.3f\n",
-            this->mass / (4*M_PI/3 * this->radius*this->radius*this->radius),
-            new_mass / (4*M_PI/3 * new_radius*new_radius*new_radius)
-        );
 
         return std::make_unique<Body>(
             new_mass, new_pos, new_speed, new_radius

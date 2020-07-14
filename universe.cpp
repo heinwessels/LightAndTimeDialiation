@@ -45,7 +45,7 @@ void Universe::handle_collisions(){
         while (j < matter.size()){
 
             // Check for collision
-            if (matter[i]->check_collision_with(matter[j].get())){
+            if (matter[i]->check_collision_with(*matter[j])){
 
                 // Handle possible combining
                 auto combined = matter[i]->combine_with(matter[j].get());
