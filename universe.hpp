@@ -10,12 +10,12 @@
 class Universe{
     public:
     Universe(Renderer &r) : renderer(&r), observer(r.screen_width, r.screen_height) {};
-    ~Universe();
+    ~Universe(){};
 
     class Observer{
     public:
         Vec3<double> screen_size;
-        Vec3<double> const *ref_pos = NULL;               // Pointer in order to connect to matter (if required)
+        Vec3<double> const *ref_pos = NULL;         // Pointer in order to connect to matter (if required)
         Vec3<double> cam_pos = Vec3<double>(0);     // Shift camera in pixels
         Vec3<double> *speed = NULL;                 // Pointer in order to connect to matter (if required)
         float ref_scale = 1;                        // in meter per pixel
@@ -37,7 +37,7 @@ class Universe{
     void clear_matter_outside_boundary(Vec3<double> mininum, Vec3<double> maximum);
 
     int get_num_of_matter(){return matter.size();}
-    Matter const * get_matter_at(Vec3<double> at);
+    Matter const * get_matter_at_pos(Vec3<double> at);
 
     // STORAGE OF ALL MATTER
     // Using container of matter *pointers* to avoid slicing during polymorphism.

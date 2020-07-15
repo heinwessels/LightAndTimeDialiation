@@ -147,11 +147,17 @@ void Controller::handle_input(){
                 // Move camera down
                 universe->observer.cam_pos.y --;
             }
+            if(event.key.keysym.sym == SDLK_r){
+                // Move camera down
+                universe->observer.cam_pos.x = 0;
+                universe->observer.cam_pos.y = 0;
+                universe->observer.ref_pos = NULL;
+            }
         }
 
         if (event.type == SDL_MOUSEBUTTONDOWN){
             // Nothing happensk
-            const Matter * m = universe->get_matter_at(
+            const Matter * m = universe->get_matter_at_pos(
                 universe->observer.get_universe_pos_from_screen(Vec3<double> (event.motion.x, event.motion.y, 0))
             );
             if (m){
@@ -263,10 +269,11 @@ void Controller::draw_information(
 
         renderer->render_text(renderer->sdl_renderer, rect.x, rect.y + y_step,std::string("Run/Stop: space").c_str(), renderer->gfont, &rect, &color);
         renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Singe Step: s").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Sim Speed: </>").c_str(), renderer->gfont, &rect, &color);
 
         renderer->render_text(renderer->sdl_renderer, x_start, rect.y + y_step,std::string("Camera: arrows").c_str(), renderer->gfont, &rect, &color);
         renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Zoom: +/-").c_str(), renderer->gfont, &rect, &color);
-        renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Sim Speed: </>").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Reset Camera: r").c_str(), renderer->gfont, &rect, &color);
 
         renderer->render_text(renderer->sdl_renderer, x_start, rect.y + y_step,std::string("Set Camera: click").c_str(), renderer->gfont, &rect, &color);
     }

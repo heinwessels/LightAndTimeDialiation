@@ -51,6 +51,11 @@ void Universe::handle_collisions(){
                 auto combined = matter[i]->combine_with(matter[j].get());
                 if (combined != NULL){
 
+                    // OBSERVER: Check if we were following <i> or <j>, and update the camera if we were
+                    if (observer.ref_pos == &matter[i]->pos || observer.ref_pos == &matter[j]->pos){
+                        observer.ref_pos = &combined->pos;
+                    }
+
                     // Combine the to matter by overwriting index <i>, and deleting index <j>
                     matter[i] = std::move(combined);
                     matter.erase (matter.begin() + j);
@@ -105,7 +110,7 @@ void Universe::draw(){
 
 }
 
-Matter const * Universe::get_matter_at(Vec3<double> at){
+Matter const * Universe::get_matter_at_pos(Vec3<double> at){
     // Finds matter at this <pos>, based on graphic. (Used for GUI)
     for (auto & m : matter){
         if (m->is_at(at)){
@@ -122,9 +127,4 @@ Vec3<double> Universe::Observer::get_screen_position(Vec3<double> uni_pos){
 Vec3<double> Universe::Observer::get_universe_pos_from_screen(Vec3<double> screen_pos){
     Vec3<double> ref = ref_pos ? *ref_pos : Vec3<double> (0);
     return (screen_pos - cam_pos * zoom - screen_size / 2) / (ref_scale * zoom) + ref;
-}
-
-Universe::~Universe(){
-    delete observer.ref_pos;
-    delete observer.speed;
 }
