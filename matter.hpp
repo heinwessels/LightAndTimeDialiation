@@ -23,6 +23,7 @@ public:
     bool check_collision_with(Matter const &other);
     virtual std::unique_ptr<Matter> combine_with(Matter * other) = 0;
     virtual bool clear_if_outside_boundary(Vec3<double> lower_left_corner, Vec3<double> upper_right_corner) = 0;
+    bool is_at(Vec3<double> at){return collision_box->is_at(pos, at);}
 };
 
 class Body : public Matter{

@@ -11,8 +11,8 @@ void Controller::init(){
     universe = std::make_unique<Universe>(*renderer);
 
     // Choose from templates
-    // Template::sun_earth_moon(*universe);
-    Template::gas_cloud(*universe);
+    Template::sun_earth_moon(*universe);
+    // Template::gas_cloud(*universe);
 }
 
 void Controller::run(){
@@ -150,7 +150,14 @@ void Controller::handle_input(){
         }
 
         if (event.type == SDL_MOUSEBUTTONDOWN){
-            // Nothing happens
+            // Nothing happensk
+            const Matter * m = universe->get_matter_at(
+                universe->observer.get_universe_pos_from_screen(Vec3<double> (event.motion.x, event.motion.y, 0))
+            );
+            if (m){
+                universe->observer.ref_pos = &m->pos;
+                universe->observer.cam_pos = Vec3<double> (0);
+            }
         }
     }
 }

@@ -44,6 +44,18 @@ bool Physics::Circle::collision_with(Vec3<double> this_pos, Vec3<double> other_p
     }
 }
 
+bool Physics::Rectangle::is_at(Vec3<double> me, Vec3<double> at){
+    return
+        at.x > me.x - width/2.0     &&
+        at.x < me.x + width/2.0     &&
+        at.y > me.y - height/2.0    &&
+        at.y < me.y + height/2.0;
+}
+
+bool Physics::Circle::is_at(Vec3<double> me, Vec3<double> at){
+    return (me.x-at.x)*(me.x-at.x) + (me.y-at.y)*(me.y-at.y) < radius*radius;
+}
+
 void Physics::Mass::apply_force(Vec3<double> force){
     force_applied += force; // The force will applied to the mass when <step> is called
 }

@@ -21,6 +21,7 @@ public:
         CollisionBox(Type type) : type(type) {}
         virtual ~CollisionBox() {}
         virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox const &other_box) = 0;
+        virtual bool is_at(Vec3<double> me, Vec3<double> at) = 0;
 
         bool is_circle() const {return type==circle;}
         bool is_rectangle() const {return type==rectangle;}
@@ -30,13 +31,15 @@ public:
     public:
         double width, height;
         Rectangle(double w, double h) : width(w), height(h), CollisionBox(rectangle) {};
-        virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox const &other_box);
+        virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox const &other_box) override;
+        virtual bool is_at(Vec3<double> me, Vec3<double> at) override;
     };
     class Circle: public CollisionBox{
     public:
         double radius;
         Circle(double r) : radius (r), CollisionBox(circle) {};
-        virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox const &other_box);
+        virtual bool collision_with(Vec3<double> this_pos, Vec3<double> other_pos, CollisionBox const &other_box) override;
+        virtual bool is_at(Vec3<double> me, Vec3<double> at) override;
     };
     class CollisionHandler{
     public:

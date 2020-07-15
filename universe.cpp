@@ -105,6 +105,25 @@ void Universe::draw(){
 
 }
 
+Matter const * Universe::get_matter_at(Vec3<double> at){
+    // Finds matter at this <pos>, based on graphic. (Used for GUI)
+    for (auto & m : matter){
+        if (m->is_at(at)){
+            return m.get();         // Get is fine here, as it should not be called often
+        }
+    }
+    return NULL;
+}
+
+Vec3<double> Universe::Observer::get_screen_position(Vec3<double> uni_pos){
+    Vec3<double> ref = ref_pos ? *ref_pos : Vec3<double> (0);
+    return (uni_pos - ref) * (ref_scale * zoom) + screen_size / 2 + cam_pos*zoom;
+}
+Vec3<double> Universe::Observer::get_universe_pos_from_screen(Vec3<double> screen_pos){
+    Vec3<double> ref = ref_pos ? *ref_pos : Vec3<double> (0);
+    return (screen_pos - cam_pos * zoom - screen_size / 2) / (ref_scale * zoom) + ref;
+}
+
 Universe::~Universe(){
     delete observer.ref_pos;
     delete observer.speed;
