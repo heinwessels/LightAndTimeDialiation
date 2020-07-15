@@ -104,8 +104,6 @@ void Controller::handle_input(){
                 double step = pow(10,floor(log10(
                     universe->observer.zoom + pow(10,floor(log10(universe->observer.zoom)) - 1)
                 ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
-                if (step > 0.1)
-                    step = 0.1;
                 universe->observer.zoom += step;
             }
             if(event.key.keysym.sym == SDLK_KP_MINUS){
@@ -113,8 +111,6 @@ void Controller::handle_input(){
                 double step = pow(10,floor(log10(
                     universe->observer.zoom - pow(10,floor(log10(universe->observer.zoom)) - 1)
                 ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
-                if (step > 0.1)
-                    step = 0.1;
                 universe->observer.zoom -= step;
             }
             if(event.key.keysym.sym == SDLK_PERIOD){
