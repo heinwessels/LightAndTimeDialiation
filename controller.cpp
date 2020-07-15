@@ -68,6 +68,7 @@ void Controller::run(){
         handle_input();
         draw_information(
             number_of_sim_steps * time_step / time_to_loop.count(),
+            time_to_simulate_single_step.count(),
             time_step,
             1.0 / time_to_loop.count(),
             sim_time_passed,
@@ -98,6 +99,9 @@ void Controller::handle_input(){
             }
             if (event.key.keysym.sym == SDLK_s){
                 state = single_step;
+            }
+            if (event.key.keysym.sym == SDLK_h){
+                hide_ui = !hide_ui;
             }
             if(event.key.keysym.sym == SDLK_KP_PLUS){
                 // Zoom in
@@ -161,6 +165,7 @@ void Controller::handle_input(){
 
 void Controller::draw_information(
     double meas_sim_speed,
+    double meas_single_step,
     double sim_time_step,
     double meas_fps,
     double sim_time_passed,
@@ -169,95 +174,109 @@ void Controller::draw_information(
     SDL_Color color = {255, 255, 255, 255};
     SDL_Rect rect;
 
-    int y_spacing = 20;
-    int x_2nd_col = 220;
+    if (!hide_ui){
+        int y_spacing = 20;
+        int x_2nd_col = 220;
 
-    renderer->render_text(
-        renderer->sdl_renderer, 10, 10,
-        std::string("Set Sim Speed:").c_str(),
-        renderer->gfont, &rect, &color
-    );
-    renderer->render_text(
-        renderer->sdl_renderer, x_2nd_col, 10,
-        seconds_to_time_string(
-            std::string(""), simulation_speed, std::string("   per second")
-        ).c_str(),
-        renderer->gfont, &rect, &color
-    );
+        renderer->render_text(renderer->sdl_renderer, 10, 10, std::string("Set Sim Speed:").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(renderer->sdl_renderer, x_2nd_col, 10, seconds_to_time_string(
+                std::string(""), simulation_speed, std::string("   per second")
+            ).c_str(), renderer->gfont, &rect, &color
+        );
 
-    renderer->render_text(
-        renderer->sdl_renderer, 10, rect.y + y_spacing,
-        std::string("Measured Sim Speed:").c_str(),
-        renderer->gfont, &rect, &color
-    );
-    renderer->render_text(
-        renderer->sdl_renderer, x_2nd_col, rect.y,
-        seconds_to_time_string(
-            std::string(""), meas_sim_speed, std::string("   per second")
-        ).c_str(),
-        renderer->gfont, &rect, &color
-    );
+        renderer->render_text(renderer->sdl_renderer, 10, rect.y + y_spacing, std::string("Measured Sim Speed:").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(
+            renderer->sdl_renderer, x_2nd_col, rect.y,
+            seconds_to_time_string(
+                std::string(""), meas_sim_speed, std::string("   per second")
+            ).c_str(),
+            renderer->gfont, &rect, &color
+        );
 
-    renderer->render_text(
-        renderer->sdl_renderer, 10, rect.y + y_spacing,
-        std::string("Simulation Time Passed:").c_str(),
-        renderer->gfont, &rect, &color
-    );
-    renderer->render_text(
-        renderer->sdl_renderer, x_2nd_col, rect.y,
-        seconds_to_time_string(
-            std::string(""), sim_time_passed, std::string("")
-        ).c_str(),
-        renderer->gfont, &rect, &color
-    );
+        renderer->render_text(renderer->sdl_renderer, 10, rect.y + y_spacing, std::string("Simulation Time Passed:").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(
+            renderer->sdl_renderer, x_2nd_col, rect.y,
+            seconds_to_time_string(
+                std::string(""), sim_time_passed, std::string("")
+            ).c_str(),
+            renderer->gfont, &rect, &color
+        );
 
-    renderer->render_text(
-        renderer->sdl_renderer, 10, rect.y + y_spacing,
-        std::string("Simulation Time Step:").c_str(),
-        renderer->gfont, &rect, &color
-    );
-    renderer->render_text(
-        renderer->sdl_renderer, x_2nd_col, rect.y,
-        seconds_to_time_string(
-            std::string(""), sim_time_step, std::string("")
-        ).c_str(),
-        renderer->gfont, &rect, &color
-    );
+        renderer->render_text(renderer->sdl_renderer, 10, rect.y + y_spacing, std::string("Simulation Time Step:").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(
+            renderer->sdl_renderer, x_2nd_col, rect.y,
+            seconds_to_time_string(
+                std::string(""), sim_time_step, std::string("")
+            ).c_str(),
+            renderer->gfont, &rect, &color
+        );
 
-    renderer->render_text(
-        renderer->sdl_renderer, 10, rect.y + y_spacing,
-        (std::string("FPS (set to ")+std::to_string(int(fps_limit))+std::string("):")).c_str(),
-        renderer->gfont, &rect, &color
-    );
-    renderer->render_text(
-        renderer->sdl_renderer, x_2nd_col, rect.y,
-        std::to_string(meas_fps).c_str(),
-        renderer->gfont, &rect, &color
-    );
+        renderer->render_text(
+            renderer->sdl_renderer, 10, rect.y + y_spacing,
+            (std::string("FPS (set to ")+std::to_string(int(fps_limit))+std::string("):")).c_str(),
+            renderer->gfont, &rect, &color
+        );
+        renderer->render_text(
+            renderer->sdl_renderer, x_2nd_col, rect.y,
+            std::to_string(meas_fps).c_str(),
+            renderer->gfont, &rect, &color
+        );
 
-    renderer->render_text(
-        renderer->sdl_renderer, 10, rect.y + y_spacing,
-        std::string("Rendering Time:").c_str(),
-        renderer->gfont, &rect, &color
-    );
-    renderer->render_text(
-        renderer->sdl_renderer, x_2nd_col, rect.y,
-        seconds_to_time_string(
-            std::string(""), meas_render_time, std::string("")
-        ).c_str(),
-        renderer->gfont, &rect, &color
-    );
+        renderer->render_text(renderer->sdl_renderer, 10, rect.y + y_spacing, std::string("Singe Step Time:").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(
+            renderer->sdl_renderer, x_2nd_col, rect.y,
+            seconds_to_time_string(
+                std::string(""), meas_single_step, std::string("")
+            ).c_str(),
+            renderer->gfont, &rect, &color
+        );
 
-    renderer->render_text(
-        renderer->sdl_renderer, 10, rect.y + y_spacing,
-        std::string("Number of Objects:").c_str(),
-        renderer->gfont, &rect, &color
-    );
-    renderer->render_text(
-        renderer->sdl_renderer, x_2nd_col, rect.y,
-        std::to_string(universe->get_num_of_matter()).c_str(),
-        renderer->gfont, &rect, &color
-    );
+        renderer->render_text(
+            renderer->sdl_renderer, 10, rect.y + y_spacing,
+            std::string("Rendering Time:").c_str(),
+            renderer->gfont, &rect, &color
+        );
+        renderer->render_text(
+            renderer->sdl_renderer, x_2nd_col, rect.y,
+            seconds_to_time_string(
+                std::string(""), meas_render_time, std::string("")
+            ).c_str(),
+            renderer->gfont, &rect, &color
+        );
+
+        renderer->render_text(
+            renderer->sdl_renderer, 10, rect.y + y_spacing,
+            std::string("Number of Objects:").c_str(),
+            renderer->gfont, &rect, &color
+        );
+        renderer->render_text(
+            renderer->sdl_renderer, x_2nd_col, rect.y,
+            std::to_string(universe->get_num_of_matter()).c_str(),
+            renderer->gfont, &rect, &color
+        );
+
+
+        // CONTROLS
+        int x_start = 10, y_start = renderer->screen_height - 90;
+        int y_step = 20, x_step = 200;
+        renderer->render_text(renderer->sdl_renderer, x_start, y_start, std::string("Hide UI: h").c_str(), renderer->gfont, &rect, &color);
+
+        renderer->render_text(renderer->sdl_renderer, rect.x, rect.y + y_step,std::string("Run/Stop: space").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Singe Step: s").c_str(), renderer->gfont, &rect, &color);
+
+        renderer->render_text(renderer->sdl_renderer, x_start, rect.y + y_step,std::string("Camera: arrows").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Zoom: +/-").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Sim Speed: </>").c_str(), renderer->gfont, &rect, &color);
+
+        renderer->render_text(renderer->sdl_renderer, x_start, rect.y + y_step,std::string("Set Camera: click").c_str(), renderer->gfont, &rect, &color);
+    }
+    else{
+        renderer->render_text(
+            renderer->sdl_renderer, 10, renderer->screen_height - 30,
+            std::string("Show UI <h>").c_str(),
+            renderer->gfont, &rect, &color
+        );
+    }
 }
 
 std::string Controller::seconds_to_time_string(std::string pre, double seconds, std::string post){

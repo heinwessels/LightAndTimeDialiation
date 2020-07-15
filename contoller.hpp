@@ -37,7 +37,7 @@ private:
     std::unique_ptr<Universe> universe;
 
     void handle_input();
-    void draw_information(double meas_sim_speed, double sim_time_step, double meas_fps, double sim_time_passed, double meas_render_time);
+    void draw_information(double meas_sim_speed, double meas_single_step, double sim_time_step, double meas_fps, double sim_time_passed, double meas_render_time);
     std::string seconds_to_time_string(std::string pre, double seconds, std::string post);
 };
 
