@@ -1,41 +1,45 @@
 #include "renderer.hpp"
 
-void Renderer::Rectangle::draw(SDL_Renderer *renderer, int x, int y, float scaling){
-    draw_filled_rectangle(renderer, x, y, width * scaling, height * scaling, colour);
+void Renderer::Rectangle::draw(Renderer &renderer, int x, int y, float scaling){
+    if (visible_on_screen(renderer, x, y, scaling))
+        draw_filled_rectangle(renderer, x, y, width * scaling, height * scaling, colour);
 }
-void Renderer::Circle::draw(SDL_Renderer *renderer, int x, int y, float scaling){
-    draw_filled_circle(renderer, x, y, radius * scaling, colour);
-}
-
-Renderer::~Renderer(){
-    TTF_Quit();
-    SDL_DestroyRenderer(sdl_renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+void Renderer::Circle::draw(Renderer &renderer, int x, int y, float scaling){
+    if (visible_on_screen(renderer, x, y, scaling))
+        draw_filled_circle(renderer, x, y, radius * scaling, colour);
 }
 
-void Renderer::clear_screen(){
-    SDL_SetRenderDrawColor( sdl_renderer, 0, 0, 0, 0 );
-    SDL_RenderClear(sdl_renderer);
+bool Renderer::Rectangle::visible_on_screen(Renderer &renderer, int x, int y, float scaling){
+    double graphic_width2 = width * scaling / 2.0;
+    double graphic_height2 = height * scaling / 2.0;
+    return  (x - graphic_width2 )     < (renderer.screen_width) &&
+            (x + graphic_width2 )     > (0) &&
+            (y - graphic_height2 )    < (renderer.screen_height) &&
+            (y + graphic_height2 )    > (0);
 }
-void Renderer::show_screen(){
-    SDL_RenderPresent( sdl_renderer );
+bool Renderer::Circle::visible_on_screen(Renderer &renderer, int x, int y, float scaling){
+    double scaled_radius = radius * scaling;
+    double  dx = abs(x - renderer.screen_width / 2.0 ) - renderer.screen_width / 2,
+            dy = abs(y - renderer.screen_height / 2.0) - renderer.screen_height / 2;
+    if (dx > scaled_radius || dy > scaled_radius) { return false; }
+    if (dx <= 0 || dy <= 0) { return true; }
+    return (dx * dx + dy * dy <= scaled_radius * scaled_radius);
 }
 
-void Renderer::draw_filled_rectangle(SDL_Renderer *renderer, float x, float y, float width, float height, Colour colour){
+void Renderer::draw_filled_rectangle(Renderer &renderer, float x, float y, float width, float height, Colour colour){
     SDL_Rect rect;
     // The ceiling and minimum width/height of 1 is to ensure that at least a pixel is drawn.
     rect.x = (int) ceil(x - width / 2.0);
     rect.y = (int) ceil(y - height / 2.0);
     rect.w = (int) width > 1 ? width : 1;
     rect.h = (int) height > 1 ? height : 1;
-    SDL_SetRenderDrawColor(renderer, colour.r, colour.g, colour.b, colour.a);
-    SDL_RenderFillRect(renderer, &rect);
+    SDL_SetRenderDrawColor(renderer.sdl_renderer, colour.r, colour.g, colour.b, colour.a);
+    SDL_RenderFillRect(renderer.sdl_renderer, &rect);
 }
 
-void Renderer::draw_filled_circle(SDL_Renderer *renderer, float x, float y, float radius, Colour colour){
+void Renderer::draw_filled_circle(Renderer &renderer, float x, float y, float radius, Colour colour){
     // TODO: This is a inefficient algorithm. Try Bresenham.
-    SDL_SetRenderDrawColor(renderer, colour.r, colour.g, colour.b, colour.a);
+    SDL_SetRenderDrawColor(renderer.sdl_renderer, colour.r, colour.g, colour.b, colour.a);
     for (int w = 0; w < radius * 2; w++)
     {
         for (int h = 0; h < radius * 2; h++)
@@ -44,7 +48,7 @@ void Renderer::draw_filled_circle(SDL_Renderer *renderer, float x, float y, floa
             int dy = radius - h; // vertical offset
             if ((dx*dx + dy*dy) <= (radius * radius))
             {
-                SDL_RenderDrawPoint(renderer, x + dx, y + dy);
+                SDL_RenderDrawPoint(renderer.sdl_renderer, x + dx, y + dy);
             }
         }
     }
@@ -78,6 +82,21 @@ std::vector<SDL_Event> Renderer::poll_events(){
         events.push_back(event);
     }
     return events;
+}
+
+Renderer::~Renderer(){
+    TTF_Quit();
+    SDL_DestroyRenderer(sdl_renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+}
+
+void Renderer::clear_screen(){
+    SDL_SetRenderDrawColor( sdl_renderer, 0, 0, 0, 0 );
+    SDL_RenderClear(sdl_renderer);
+}
+void Renderer::show_screen(){
+    SDL_RenderPresent( sdl_renderer );
 }
 
 bool Renderer::init_window(){

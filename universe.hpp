@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <chrono>
 
 #include "matter.hpp"
 #include "renderer.hpp"

@@ -26,12 +26,12 @@ private:
 
     double simulation_speed = 60*60;          // In simulated seconds per second
     static constexpr double time_step_max = 100.0;
-    static constexpr double fps_limit = 10.0;
+    static constexpr double fps_limit = 20.0;
 
     bool hide_ui = false;
 
     enum State {idle, running, single_step, exit};
-    State state = running;
+    State state = idle;
 
     std::unique_ptr<Renderer> renderer;
     std::unique_ptr<Universe> universe;

@@ -8,6 +8,7 @@ void Universe::add_matter(std::unique_ptr<Matter> m){
 }
 
 void Universe::step(double time){
+
     handle_collisions();    // Do first, otherwise could have matter on top of each other giving insance forces
     handle_forces(time);
 }
@@ -101,7 +102,7 @@ void Universe::draw(){
         // If graphic is empty (i.e. a <Renderer::Graphic> type), <draw()> will do nothing.
         Vec3<double> screen_pos = observer.get_screen_position(matter[i]->pos);
         matter[i]->graphic->draw(
-            renderer->get_renderer(),
+            *renderer,
             screen_pos.x,
             screen_pos.y,
             observer.get_scale_factor()

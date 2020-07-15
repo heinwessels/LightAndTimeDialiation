@@ -24,19 +24,23 @@ public:
     public:
         virtual ~Graphic(){};
         Colour colour;
-        virtual void draw(SDL_Renderer *renderer, int x, int y, float scaling){};
+        virtual void draw(Renderer &renderer, int x, int y, float scaling){};
+        virtual bool visible_on_screen(Renderer &renderer, int x, int y, float scaling) = 0;
+
     };
     class Rectangle : public Graphic{
     public:
         float width, height;
         Rectangle(float w, float h, Colour c) : width(w), height(h) {colour = c;};
-        virtual void draw(SDL_Renderer *renderer, int x, int y, float scaling);
+        virtual void draw(Renderer &renderer, int x, int y, float scaling) override;
+        bool visible_on_screen(Renderer &renderer, int x, int y, float scaling) override;
     };
     class Circle : public Graphic{
     public:
         float radius;
         Circle(float r, Colour c) : radius (r) {colour = c;};
-        virtual void draw(SDL_Renderer *renderer, int x, int y, float scaling);
+        virtual void draw(Renderer &renderer, int x, int y, float scaling) override;
+        bool visible_on_screen(Renderer &renderer, int x, int y, float scaling) override;
     };
 
     ~Renderer();
@@ -47,8 +51,8 @@ public:
     std::vector<SDL_Event> poll_events();
     SDL_Renderer *get_renderer(){return sdl_renderer;}
 
-    static void draw_filled_rectangle(SDL_Renderer *renderer, float x, float y, float width, float height, Colour colour);
-    static void draw_filled_circle(SDL_Renderer *renderer, float x, float y, float radius, Colour colour);
+    static void draw_filled_rectangle(Renderer &renderer, float x, float y, float width, float height, Colour colour);
+    static void draw_filled_circle(Renderer &renderer, float x, float y, float radius, Colour colour);
     static void render_text(SDL_Renderer *renderer, int x, int y, const char *text, TTF_Font *font, SDL_Rect *rect, SDL_Color *color);
 
     int screen_width = 1000;
