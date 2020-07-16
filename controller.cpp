@@ -19,7 +19,7 @@ void Controller::run(){
     using clock = std::chrono::system_clock;
     using sec = std::chrono::duration<double>;
 
-    sec time_to_simulate_single_step (0.000001);
+    sec time_to_simulate_single_step (0.1);  // Start slow
     sec time_to_render (0);
     sec time_to_loop (1.0 / fps_limit);
     double sim_time_passed = 0; // In seconds
@@ -33,22 +33,50 @@ void Controller::run(){
         // Handle Simulation
         // --------------------------------------------------
         int number_of_sim_steps = 0;
+
+        // Estimate how long we can sim for to keep up with FPS
         sec time_left_to_sim = sec(1.0 / fps_limit) - time_to_render;
+
+        // Estimate required time step to keep up simulation speed
         double time_step = simulation_speed * time_to_simulate_single_step.count();
+        if (time_step == 0){time_step = time_step_max;} // Will happen if running after idle.
         time_step = time_step < time_step_max ? time_step : time_step_max;
         if (state == single_step){time_step = time_step_max;}   // Otherwise single steps are too slow
+
+
+        // Run the simulation, depending on fixed_step or not
         if (state == single_step || state == running){
-            while(time_left_to_sim > time_to_simulate_single_step || !number_of_sim_steps){
 
-                // Step the universe!
-                universe->step(time_step);
-                sim_time_passed += time_step;
+            if(!fixed_step){
+                while(time_left_to_sim > time_to_simulate_single_step || !number_of_sim_steps){
 
-                // Calculate the amount of time we can still use to simulate
-                time_left_to_sim = (time_per_frame - time_to_render)
-                                    - (clock::now() - time_loop_start);
+                    // Step the universe!
+                    universe->step(time_step);
+                    sim_time_passed += time_step;
 
-                number_of_sim_steps++;
+                    // Calculate the amount of time we can still use to simulate
+                    time_left_to_sim = (time_per_frame - time_to_render)
+                                        - (clock::now() - time_loop_start);
+
+                    number_of_sim_steps++;
+                }
+            }
+            else if (state == running){
+                // Fixed step (used for recording). A little different
+
+                // Estimate how many steps we need based on the calculated time_step
+                int required_num_of_steps = (int) ceil(simulation_speed / fps_limit / time_step);
+                time_step = simulation_speed / fps_limit / required_num_of_steps; // Update time_step for rounded number of steps
+
+                // Loop!
+                while(number_of_sim_steps < required_num_of_steps){
+
+                    // Step the universe!
+                    universe->step(time_step);
+                    sim_time_passed += time_step;
+
+                    number_of_sim_steps++;
+                }
             }
         }
 
@@ -75,6 +103,9 @@ void Controller::run(){
             time_to_render.count()
         );
         renderer->show_screen();
+        if(record && state == running){
+            renderer->screenshot("shot_" + std::to_string((int)sim_time_passed));
+        }
 
         time_to_loop = clock::now() - time_loop_start;
         time_to_render = clock::now() - time_render_start;
@@ -147,12 +178,20 @@ void Controller::handle_input(){
                 // Move camera down
                 universe->observer.cam_pos.y --;
             }
+            if(event.key.keysym.sym == SDLK_f){
+                // Set fixed render/update step
+                fixed_step = !fixed_step;
+            }
+            if(event.key.keysym.sym == SDLK_r){
+                // Turn on/off recording
+                record = !record;
+            }
             if(event.key.keysym.sym == SDLK_n){
                 // Track next object
                 universe->camera_track_next_matter();
                 universe->observer.cam_pos = Vec3<double> (0);
             }
-            if(event.key.keysym.sym == SDLK_r){
+            if(event.key.keysym.sym == SDLK_c){
                 // Reset camera
                 universe->observer.cam_pos.x = 0;
                 universe->observer.cam_pos.y = 0;
@@ -189,6 +228,8 @@ void Controller::draw_information(
         int y_spacing = 20;
         int x_2nd_col = 220;
 
+        // TOP LEFT
+        /////////////////////////////////
         renderer->render_text(renderer->sdl_renderer, 10, 10, std::string("Set Sim Speed:").c_str(), renderer->gfont, &rect, &color);
         renderer->render_text(renderer->sdl_renderer, x_2nd_col, 10, seconds_to_time_string(
                 std::string(""), simulation_speed, std::string("   per second")
@@ -222,8 +263,7 @@ void Controller::draw_information(
             renderer->gfont, &rect, &color
         );
 
-        renderer->render_text(
-            renderer->sdl_renderer, 10, rect.y + y_spacing,
+        renderer->render_text(renderer->sdl_renderer, 10, rect.y + y_spacing,
             (std::string("FPS (set to ")+std::to_string(int(fps_limit))+std::string("):")).c_str(),
             renderer->gfont, &rect, &color
         );
@@ -255,10 +295,8 @@ void Controller::draw_information(
             renderer->gfont, &rect, &color
         );
 
-        renderer->render_text(
-            renderer->sdl_renderer, 10, rect.y + y_spacing,
-            std::string("Number of Objects:").c_str(),
-            renderer->gfont, &rect, &color
+        renderer->render_text(renderer->sdl_renderer, 10, rect.y + y_spacing,
+            std::string("Number of Objects:").c_str(), renderer->gfont, &rect, &color
         );
         renderer->render_text(
             renderer->sdl_renderer, x_2nd_col, rect.y,
@@ -266,8 +304,21 @@ void Controller::draw_information(
             renderer->gfont, &rect, &color
         );
 
+        rect.y += y_spacing;    // Give a little gap
 
-        // CONTROLS
+        if (fixed_step){
+            renderer->render_text(renderer->sdl_renderer, 10, rect.y + y_spacing,
+                std::string("Fixed Step").c_str(), renderer->gfont, &rect, &color
+            );
+        }
+        if (record){
+            renderer->render_text(renderer->sdl_renderer, 10, rect.y + y_spacing,
+                std::string("Recording...").c_str(), renderer->gfont, &rect, &color
+            );
+        }
+
+
+        // BOTTOM LEFT
         int x_start = 10, y_start = renderer->screen_height - 90;
         int y_step = 20, x_step = 200;
         renderer->render_text(renderer->sdl_renderer, x_start, y_start, std::string("Hide UI: h").c_str(), renderer->gfont, &rect, &color);
@@ -275,13 +326,16 @@ void Controller::draw_information(
         renderer->render_text(renderer->sdl_renderer, rect.x, rect.y + y_step,std::string("Run/Stop: space").c_str(), renderer->gfont, &rect, &color);
         renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Singe Step: s").c_str(), renderer->gfont, &rect, &color);
         renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Sim Speed: </>").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Fixed Step: f").c_str(), renderer->gfont, &rect, &color);
 
         renderer->render_text(renderer->sdl_renderer, x_start, rect.y + y_step,std::string("Camera: arrows").c_str(), renderer->gfont, &rect, &color);
         renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Zoom: +/-").c_str(), renderer->gfont, &rect, &color);
-        renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Reset Camera: r").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Reset Camera: c").c_str(), renderer->gfont, &rect, &color);
 
         renderer->render_text(renderer->sdl_renderer, x_start, rect.y + y_step,std::string("Set Camera: click").c_str(), renderer->gfont, &rect, &color);
         renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Next Body: n").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Record: n").c_str(), renderer->gfont, &rect, &color);
+
     }
     else{
         renderer->render_text(

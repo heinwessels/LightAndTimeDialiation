@@ -84,6 +84,13 @@ std::vector<SDL_Event> Renderer::poll_events(){
     return events;
 }
 
+void Renderer::screenshot(std::string path){
+    SDL_Surface *sshot = SDL_CreateRGBSurface(0, screen_width, screen_height, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+    SDL_RenderReadPixels(sdl_renderer, NULL, SDL_PIXELFORMAT_ARGB8888, sshot->pixels, sshot->pitch);
+    SDL_SaveBMP(sshot, ("screenshots/" + path).c_str());
+    SDL_FreeSurface(sshot);
+}
+
 Renderer::~Renderer(){
     TTF_Quit();
     SDL_DestroyRenderer(sdl_renderer);

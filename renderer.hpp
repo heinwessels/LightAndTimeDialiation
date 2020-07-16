@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <vector>
+#include <string>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -49,6 +50,7 @@ public:
     void clear_screen();
     void show_screen();
     std::vector<SDL_Event> poll_events();
+    void screenshot(std::string path);
     SDL_Renderer *get_renderer(){return sdl_renderer;}
 
     static void draw_filled_rectangle(Renderer &renderer, float x, float y, float width, float height, Colour colour);
