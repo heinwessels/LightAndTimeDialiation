@@ -12,7 +12,7 @@ void Controller::init(){
 
     // Choose from templates
     // Template::sun_earth_moon(*universe);
-    Template::gas_cloud(*universe);
+    Template::three_body_figure_eight(*universe);
 }
 
 void Controller::run(){

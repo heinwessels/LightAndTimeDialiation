@@ -24,13 +24,13 @@ public:
     ~Controller(){};
 private:
 
-    double simulation_speed = 1000;          // In simulated seconds per second
-    static constexpr double time_step_max = 100.0;
-    static constexpr double fps_limit = 10.0;
+    double simulation_speed = 1;          // In simulated seconds per second
+    static constexpr double time_step_max = 1.0;
+    static constexpr double fps_limit = 30.0;
 
     bool hide_ui = false;
-    bool fixed_step = true;
-    bool record = true;
+    bool fixed_step = false;
+    bool record = false;
 
     enum State {idle, running, single_step, exit};
     State state = running;

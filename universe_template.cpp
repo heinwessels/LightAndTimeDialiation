@@ -122,3 +122,39 @@ void Template::gas_cloud(Universe &universe){
     universe.observer.speed = new Vec3<double>(0);
     universe.observer.ref_scale = (double)universe.observer.screen_size.x / (x_end - x_start);
 }
+
+void Template::three_body_figure_eight(Universe &universe){
+    // Stable 3-body orbit
+
+
+    // From here: https://arxiv.org/pdf/1705.00527.pdf
+    Vec3<double> pos (-1.0024277970, 0.0041695061, 0);
+    Vec3<double> speed (0.3489048974, 0.5306305100, 0);
+    // This should result in a period of 6.349 seconds
+    // And m1 = m2 = m3 = G = 1
+    // Thus making mass = 1/actual-G
+    double mass = 1.0/Physics::G;
+    double radius = 0.05;
+
+    universe.add_matter(std::make_unique<Body>(
+        mass,
+        pos,
+        speed,
+        radius
+    ));
+    universe.add_matter(std::make_unique<Body>(
+        mass,
+        pos * -1,
+        speed,
+        radius
+    ));
+    universe.add_matter(std::make_unique<Body>(
+        mass,
+        Vec3<double> (0),
+        speed * -2,
+        radius
+    ));
+
+    universe.observer.speed = new Vec3<double>(0);
+    universe.observer.ref_scale = (double)universe.observer.screen_size.x / 3;
+}
