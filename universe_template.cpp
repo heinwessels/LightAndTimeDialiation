@@ -157,4 +157,6 @@ void Template::three_body_figure_eight(Universe &universe){
 
     universe.observer.speed = new Vec3<double>(0);
     universe.observer.ref_scale = (double)universe.observer.screen_size.x / 3;
+    universe.observer.simulation_speed = 1;
+    universe.observer.time_step_max = 1e-6;
 }

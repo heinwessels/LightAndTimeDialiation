@@ -19,6 +19,8 @@ class Universe{
         Vec3<double> *ref_pos = NULL;         // Pointer in order to connect to matter (if required, otherwise NULL)
         Vec3<double> cam_pos = Vec3<double>(0);     // Shift camera in pixels
         Vec3<double> *speed = NULL;                 // Pointer in order to connect to matter (if required)
+        double simulation_speed = 60*60;          // In simulated seconds per second
+        double time_step_max = 100;
         float ref_scale = 1;                        // in meter per pixel
         float zoom = 1;
         Observer(int screen_width, int screen_height) : screen_size (screen_width, screen_width, 0) {};

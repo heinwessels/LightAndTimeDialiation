@@ -38,10 +38,10 @@ void Controller::run(){
         sec time_left_to_sim = sec(1.0 / fps_limit) - time_to_render;
 
         // Estimate required time step to keep up simulation speed
-        double time_step = simulation_speed * time_to_simulate_single_step.count();
-        if (time_step == 0){time_step = time_step_max;} // Will happen if running after idle.
-        time_step = time_step < time_step_max ? time_step : time_step_max;
-        if (state == single_step){time_step = time_step_max;}   // Otherwise single steps are too slow
+        double time_step = universe->observer.simulation_speed * time_to_simulate_single_step.count();
+        if (time_step == 0){time_step = universe->observer.time_step_max;} // Will happen if running after idle.
+        time_step = time_step < universe->observer.time_step_max ? time_step : universe->observer.time_step_max;
+        if (state == single_step){time_step = universe->observer.time_step_max;}   // Otherwise single steps are too slow
 
 
         // Run the simulation, depending on fixed_step or not
@@ -65,8 +65,8 @@ void Controller::run(){
                 // Fixed step (used for recording). A little different
 
                 // Estimate how many steps we need based on the calculated time_step
-                int required_num_of_steps = (int) ceil(simulation_speed / fps_limit / time_step);
-                time_step = simulation_speed / fps_limit / required_num_of_steps; // Update time_step for rounded number of steps
+                int required_num_of_steps = (int) ceil(universe->observer.simulation_speed / fps_limit / time_step);
+                time_step = universe->observer.simulation_speed / fps_limit / required_num_of_steps; // Update time_step for rounded number of steps
 
                 // Loop!
                 while(number_of_sim_steps < required_num_of_steps){
@@ -151,16 +151,16 @@ void Controller::handle_input(){
             if(event.key.keysym.sym == SDLK_PERIOD){
                 // Speed up simulation
                 double step = pow(10,floor(log10(
-                    simulation_speed + pow(10,floor(log10(simulation_speed)) - 1)
+                    universe->observer.simulation_speed + pow(10,floor(log10(universe->observer.simulation_speed)) - 1)
                 ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
-                simulation_speed += step;
+                universe->observer.simulation_speed += step;
             }
             if(event.key.keysym.sym == SDLK_COMMA){
                 // Slow down simulation
                 double step = pow(10,floor(log10(
-                    simulation_speed - pow(10,floor(log10(simulation_speed)) - 1)
+                    universe->observer.simulation_speed - pow(10,floor(log10(universe->observer.simulation_speed)) - 1)
                 ))); // Calcuate step size depending on current value (eg. step = 0.1 if 0.3, and 0.01 if 0.06, etc.)
-                simulation_speed -= step;
+                universe->observer.simulation_speed -= step;
             }
             if(event.key.keysym.sym == SDLK_LEFT){
                 // Move camera left
@@ -232,7 +232,7 @@ void Controller::draw_information(
         /////////////////////////////////
         renderer->render_text(renderer->sdl_renderer, 10, 10, std::string("Set Sim Speed:").c_str(), renderer->gfont, &rect, &color);
         renderer->render_text(renderer->sdl_renderer, x_2nd_col, 10, seconds_to_time_string(
-                std::string(""), simulation_speed, std::string("   per second")
+                std::string(""), universe->observer.simulation_speed, std::string("   per second")
             ).c_str(), renderer->gfont, &rect, &color
         );
 
