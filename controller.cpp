@@ -11,8 +11,8 @@ void Controller::init(){
     universe = std::make_unique<Universe>(*renderer);
 
     // Choose from templates
-    Template::sun_earth_moon(*universe);
-    // Template::gas_cloud(*universe);
+    // Template::sun_earth_moon(*universe);
+    Template::gas_cloud(*universe);
 }
 
 void Controller::run(){
@@ -147,8 +147,13 @@ void Controller::handle_input(){
                 // Move camera down
                 universe->observer.cam_pos.y --;
             }
+            if(event.key.keysym.sym == SDLK_n){
+                // Track next object
+                universe->camera_track_next_matter();
+                universe->observer.cam_pos = Vec3<double> (0);
+            }
             if(event.key.keysym.sym == SDLK_r){
-                // Move camera down
+                // Reset camera
                 universe->observer.cam_pos.x = 0;
                 universe->observer.cam_pos.y = 0;
                 universe->observer.ref_pos = NULL;
@@ -157,7 +162,7 @@ void Controller::handle_input(){
 
         if (event.type == SDL_MOUSEBUTTONDOWN){
             // Nothing happensk
-            const Matter * m = universe->get_matter_at_pos(
+            Matter * m = universe->get_matter_at_pos(
                 universe->observer.get_universe_pos_from_screen(Vec3<double> (event.motion.x, event.motion.y, 0))
             );
             if (m){
@@ -276,6 +281,7 @@ void Controller::draw_information(
         renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Reset Camera: r").c_str(), renderer->gfont, &rect, &color);
 
         renderer->render_text(renderer->sdl_renderer, x_start, rect.y + y_step,std::string("Set Camera: click").c_str(), renderer->gfont, &rect, &color);
+        renderer->render_text(renderer->sdl_renderer, rect.x + x_step, rect.y,std::string("Next Body: n").c_str(), renderer->gfont, &rect, &color);
     }
     else{
         renderer->render_text(

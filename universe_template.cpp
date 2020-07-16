@@ -37,7 +37,6 @@ void Template::sun_earth_moon(Universe &universe){
     universe.add_matter(std::move(moon));
 
     // Setup Observer
-    universe.observer.ref_pos = new Vec3<double>(0);
     universe.observer.speed = new Vec3<double>(0);
     // universe->observer.ref_scale = (double)renderer->screen_width / (384400000 * 3);
     universe.observer.ref_scale = (double)universe.observer.screen_size.x / (149598023000 * 2.5);
@@ -46,7 +45,9 @@ void Template::sun_earth_moon(Universe &universe){
 
 void Template::gas_cloud(Universe &universe){
 
-    uint32_t gseed = 555;
+    // uint32_t gseed = 555;   // Creates cool close orbit
+    uint32_t gseed = 5225;
+
     double x_start = -2e9, x_end = 2e9;
     double y_start = -2e9, y_end = 2e9;
 
@@ -76,7 +77,7 @@ void Template::gas_cloud(Universe &universe){
     double minimim_mass = 1e15;
     double maximum_mass = 5e25;
     double spacing_multiplier = 5e0;
-    double speed_multiplier = 1e4;
+    double speed_multiplier = 4e5;
 
     double x = x_start, y = y_start;
     double max_radius = 0;
@@ -118,7 +119,6 @@ void Template::gas_cloud(Universe &universe){
     }
 
     // Setup Observer
-    universe.observer.ref_pos = new Vec3<double>(0);
     universe.observer.speed = new Vec3<double>(0);
     universe.observer.ref_scale = (double)universe.observer.screen_size.x / (x_end - x_start);
 }

@@ -108,10 +108,9 @@ void Universe::draw(){
             observer.get_scale_factor()
         );
     }
-
 }
 
-Matter const * Universe::get_matter_at_pos(Vec3<double> at){
+Matter * Universe::get_matter_at_pos(Vec3<double> at){
     // Finds matter at this <pos>, based on graphic. (Used for GUI)
     for (auto & m : matter){
         if (m->is_at(at)){
@@ -119,6 +118,25 @@ Matter const * Universe::get_matter_at_pos(Vec3<double> at){
         }
     }
     return NULL;
+}
+
+void Universe::camera_track_next_matter(){
+    // Link the observer to the next matter
+    if (!observer.ref_pos){
+        observer.ref_pos = &matter[0]->pos;
+    }
+    else{
+        int i = 0;
+        while (i < matter.size()){
+            if (observer.ref_pos == &matter[i]->pos){
+                observer.ref_pos = &matter[(i == matter.size() - 1) ? 0 : i + 1]->pos;
+
+                i = matter.size();
+            }
+            i++;
+        }
+    }
+
 }
 
 Vec3<double> Universe::Observer::get_screen_position(Vec3<double> uni_pos){

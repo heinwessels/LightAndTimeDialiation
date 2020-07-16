@@ -31,7 +31,7 @@ private:
     bool hide_ui = false;
 
     enum State {idle, running, single_step, exit};
-    State state = idle;
+    State state = running;
 
     std::unique_ptr<Renderer> renderer;
     std::unique_ptr<Universe> universe;
