@@ -1,6 +1,7 @@
 # LightAndTimeDialiation
 This project will be a *very* simplified simulation of the creation of a galaxy or sun from a gas cloud. However, the **goal** is to learn more about C++ and OOP best practices, by rewriting a previous project called [UniverseSimulation](https://github.com/heinwessels/UniverseSimulator). The idea is to over-design everything to force the use of best practices that will typically be used for large commercial projects.
 
+
 ## Development Process
 The process I during the development of this project is as follows:
 
@@ -34,3 +35,8 @@ I designed the class structure using a UML diagram using LucidChart. I favoured 
 ## Improvements from previous Universe Simulation
 - Simulation speed per second is constant, e.g. `200 seconds per second`. If the processing takes too long it will increase the time step per calculation to reduce the number of calculations, instead of limiting the amount calculations with a fixed time step. This will decrease the accuracy *slightly*, but it's negligible. This is an improvement from trying to reach a specific number of updates per second with a fixed timestep, meaning when the processing is slow, the simulation is slow.
 - Now simulating density (TODO)
+
+
+## Some Sweet Gifs
+Below is an example showing a specific gravity simulation called **The Figure Eight Solution**. It shows a special case where the three-body-problem has an analytical solution, which means the three bodies are in a periodic orbit.
+![](gifs/three_body_figure_eight_with_info.gif)

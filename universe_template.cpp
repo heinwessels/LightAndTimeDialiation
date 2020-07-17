@@ -48,6 +48,8 @@ void Template::gas_cloud(Universe &universe){
     // uint32_t gseed = 555;   // Creates cool close orbit
     uint32_t gseed = 5225;
 
+    double density = 5500;  // Density of earth [kg/m^3]
+
     double x_start = -2e9, x_end = 2e9;
     double y_start = -2e9, y_end = 2e9;
 
@@ -85,7 +87,7 @@ void Template::gas_cloud(Universe &universe){
 
         double mass_randomizer = size_perlin.normalizedOctaveNoise2D(x / size_fx, y / size_fy, size_octaves);
         double mass = minimim_mass + (mass_randomizer*5)* maximum_mass;
-        double radius = Body::get_radius_based_on_mass(mass);
+        double radius = Body::get_radius_based_on_mass_and_density(mass, density);
 
         if (radius > max_radius){max_radius = radius;}
         if (mass > minimim_mass && mass_randomizer > 0 && radius > 0){
@@ -105,7 +107,7 @@ void Template::gas_cloud(Universe &universe){
         }
         else
         {
-            radius = Body::get_radius_based_on_mass(maximum_mass);
+            radius = Body::get_radius_based_on_mass_and_density(maximum_mass, density);
         }
 
         x += spacing_multiplier * radius;
@@ -159,6 +161,41 @@ void Template::three_body_figure_eight(Universe &universe){
 
     universe.observer.speed = new Vec3<double>(0);
     universe.observer.ref_scale = (double)universe.observer.screen_size.x / 3;
+    universe.observer.simulation_speed = 1;
+    universe.observer.time_step_max = 1e-6;
+}
+
+void Template::three_body_random_dance(Universe &universe){
+
+    // THIS JUST CRASHES IN ON EACH OTHER
+
+    double mass = 1.0/Physics::G;
+    double radius = 0.05;
+
+    universe.add_matter(std::make_unique<Body>(
+        mass,
+        Vec3<double> (-0.8, 0.5, 0),
+        Vec3<double> (0.7, -0.8, 0),
+        radius,
+        Renderer::Colour(255, 0, 0, 255)
+    ));
+    universe.add_matter(std::make_unique<Body>(
+        mass,
+        Vec3<double> (-0.6, 0.8, 0),
+        Vec3<double> (0.3, 0.5, 0),
+        radius,
+        Renderer::Colour(0, 255, 0, 255)
+    ));
+    universe.add_matter(std::make_unique<Body>(
+        mass,
+        Vec3<double> (0.6, -0.4, 0),
+        Vec3<double> (-1, 0.1, 0),
+        radius,
+        Renderer::Colour(0, 0, 255, 255)
+    ));
+
+    universe.observer.speed = new Vec3<double>(0);
+    universe.observer.ref_scale = (double)universe.observer.screen_size.x / 10;
     universe.observer.simulation_speed = 1;
     universe.observer.time_step_max = 1e-6;
 }

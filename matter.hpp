@@ -34,7 +34,8 @@ public:
     virtual bool clear_if_outside_boundary(Vec3<double> lower_left_corner, Vec3<double> upper_right_corner){return false;}
     std::unique_ptr<Matter> combine_with(Matter * other);
 
-    static double get_radius_based_on_mass(double mass);
+    static double get_density_based_on_mass_and_radius(double mass, double radius);
+    static double get_radius_based_on_mass_and_density(double mass, double density);
 };
 
 #endif

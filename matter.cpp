@@ -32,9 +32,19 @@ std::unique_ptr<Matter> Body::combine_with(Matter * other){
         auto new_speed = (this->speed * this->mass + other->speed * other->mass)
                             / (this->mass + other->mass);
 
-        // Calculate the new radius adding through the adapted density from the combined mass
+        // Calculate the new mass
         double new_mass = this->mass + other->mass;
-        double new_radius = get_radius_based_on_mass(new_mass);
+
+        // Calculate new radius by averaging the two colliding bodies' radius,
+        // and using the volume to calculate the density from mass
+        double new_radius = pow(
+            2 * new_mass / (
+                this->mass / (this->radius*this->radius*this->radius) +
+                other->mass / (other_body->radius*other_body->radius*other_body->radius)
+            ),
+            1.0/3.0
+        );
+
 
         return std::make_unique<Body>(
             new_mass, new_pos, new_speed, new_radius
@@ -46,28 +56,9 @@ std::unique_ptr<Matter> Body::combine_with(Matter * other){
     }
 }
 
-double Body::get_radius_based_on_mass(double mass){
-    // This will questimate a gas cloud's low density relative to a earth's high density.
-    // We will not use real values, but rather reverse calculate it in 3D
-
-    const double top_density = 5514;        // Average Density of earth [kg/m^3]
-    const double top_mass = 6e24;           // The mass of the earth [kg]
-    // Interesting, first used sun, but Earth is denser than the Sun.
-    // I'm implementing bad physics.
-
-    const double bottom_density = 3000.0;   // Some density of gas clouds
-    const double bottom_mass = 1e15;        // When they weight this
-
-    double density = (mass - bottom_mass)
-                * (top_density - bottom_density) / (top_mass - bottom_mass)
-                + bottom_density;
-
-    // Override this for now. Using volume instead of area make a big difference in size.
-    density = top_density;
-
-    // Now get radius from density and mass for sphere
-    return pow(
-        mass / (4.0*M_PI/3.0 * density),
-        1.0/3.0
-    );
+double Body::get_density_based_on_mass_and_radius(double mass, double radius){
+    return mass / (4.0 * M_PI / 3.0 * radius * radius * radius);
+}
+double Body::get_radius_based_on_mass_and_density(double mass, double density){
+    return pow(mass / (4.0 * M_PI / 3.0 * density), 1.0/3.0);
 }
