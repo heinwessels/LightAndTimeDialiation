@@ -126,7 +126,6 @@ void Template::gas_cloud(Universe &universe){
 void Template::three_body_figure_eight(Universe &universe){
     // Stable 3-body orbit
 
-
     // From here: https://arxiv.org/pdf/1705.00527.pdf
     Vec3<double> pos (-1.0024277970, 0.0041695061, 0);
     Vec3<double> speed (0.3489048974, 0.5306305100, 0);
@@ -140,19 +139,22 @@ void Template::three_body_figure_eight(Universe &universe){
         mass,
         pos,
         speed,
-        radius
+        radius,
+        Renderer::Colour(255, 0, 0, 255)
     ));
     universe.add_matter(std::make_unique<Body>(
         mass,
         pos * -1,
         speed,
-        radius
+        radius,
+        Renderer::Colour(0, 255, 0, 255)
     ));
     universe.add_matter(std::make_unique<Body>(
         mass,
         Vec3<double> (0),
         speed * -2,
-        radius
+        radius,
+        Renderer::Colour(0, 0, 255, 255)
     ));
 
     universe.observer.speed = new Vec3<double>(0);

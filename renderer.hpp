@@ -58,7 +58,7 @@ public:
     static void render_text(SDL_Renderer *renderer, int x, int y, const char *text, TTF_Font *font, SDL_Rect *rect, SDL_Color *color);
 
     int screen_width = 1000;
-    int screen_height = 1000;
+    int screen_height = 500;
 
     SDL_Window *window;
     SDL_Renderer *sdl_renderer;

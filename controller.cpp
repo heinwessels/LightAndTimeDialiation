@@ -104,7 +104,10 @@ void Controller::run(){
         );
         renderer->show_screen();
         if(record && state == running){
-            renderer->screenshot("shot_" + std::to_string((int)sim_time_passed));
+            renderer->screenshot(
+                "shot_" + std::to_string((int)sim_time_passed) + "_" +
+                std::to_string((int)(std::fmod(sim_time_passed, 1.0)*1000))
+            );
         }
 
         time_to_loop = clock::now() - time_loop_start;

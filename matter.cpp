@@ -1,11 +1,14 @@
 #include "matter.hpp"
 
-Body::Body(double mass, Vec3<double> pos, Vec3<double> speed, double radius)
+Body::Body(double mass, Vec3<double> pos, Vec3<double> speed, double radius, Renderer::Colour colour)
     : radius (radius), Matter(mass, pos, speed)
 {
     collision_box = std::make_unique<Physics::Circle>(radius);
-    graphic = std::make_unique<Renderer::Circle> (radius, Renderer::Colour(0, 255, 0, 255));
+    graphic = std::make_unique<Renderer::Circle> (radius, colour);
 }
+
+Body::Body(double mass, Vec3<double> pos, Vec3<double> speed, double radius)
+    : Body(mass, pos, speed, radius, Renderer::Colour(0, 255, 0, 255)){}
 
 bool Matter::check_collision_with(Matter const &other){
     return this->collision_box->collision_with(
