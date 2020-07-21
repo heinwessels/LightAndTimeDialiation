@@ -100,13 +100,17 @@ void Universe::draw(){
     for(int i = 0; i < matter.size(); i++){
 
         // If graphic is empty (i.e. a <Renderer::Graphic> type), <draw()> will do nothing.
-        Vec3<double> screen_pos = observer.get_screen_position(matter[i]->pos);
-        matter[i]->graphic->draw(
+        matter[i]->draw(
             *renderer,
-            screen_pos.x,
-            screen_pos.y,
+            observer.get_universe_offset(),
             observer.get_scale_factor()
         );
+    }
+}
+
+void Universe::add_trail_to_matter(){
+    for (auto & m : matter){
+        m->add_pos_to_trail();
     }
 }
 
@@ -139,11 +143,18 @@ void Universe::camera_track_next_matter(){
 
 }
 
-Vec3<double> Universe::Observer::get_screen_position(Vec3<double> uni_pos){
+Vec3<double> Universe::Observer::get_screen_position_from_universe(Vec3<double> uni_pos){
     Vec3<double> ref = ref_pos ? *ref_pos : Vec3<double> (0);
-    return (uni_pos - ref) * (ref_scale * zoom) + screen_size / 2 + cam_pos*zoom;
+    return (uni_pos - ref) * (ref_scale * zoom) + screen_size / 2.0 + cam_pos*zoom;
 }
 Vec3<double> Universe::Observer::get_universe_pos_from_screen(Vec3<double> screen_pos){
     Vec3<double> ref = ref_pos ? *ref_pos : Vec3<double> (0);
-    return (screen_pos - cam_pos * zoom - screen_size / 2) / (ref_scale * zoom) + ref;
+    return (screen_pos - cam_pos * zoom - screen_size / 2.0) / (ref_scale * zoom) + ref;
+}
+Vec3<double> Universe::Observer::get_universe_offset(){
+    // Get's the global universe offset in meter. This includes the centering on the screen.
+    // If offsetting a universe location with this offset, and scaling that location,
+    // it will result with the position on the screen
+    Vec3<double> ref = ref_pos ? *ref_pos : Vec3<double> (0);
+    return ref - (screen_size / 2.0 + cam_pos * zoom) / (ref_scale * zoom);
 }

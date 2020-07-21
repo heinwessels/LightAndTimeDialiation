@@ -12,8 +12,8 @@ void Controller::init(){
 
     // Choose from templates
     // Template::sun_earth_moon(*universe);
-    Template::gas_cloud(*universe);
-    // Template::three_body_figure_eight(*universe);
+    // Template::gas_cloud(*universe);
+    Template::three_body_figure_eight(*universe);
     // Template::three_body_random_dance(*universe);
 }
 
@@ -95,6 +95,7 @@ void Controller::run(){
         const auto time_render_start = clock::now();
         renderer->clear_screen();
         universe->draw();
+        universe->add_trail_to_matter();    // Update the trails
         handle_input();
         draw_information(
             number_of_sim_steps * time_step / time_to_loop.count(),

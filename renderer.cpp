@@ -54,6 +54,11 @@ void Renderer::draw_filled_circle(Renderer &renderer, float x, float y, float ra
     }
 }
 
+void Renderer::draw_line(Renderer &renderer, float x1, float y1, float x2, float y2, Colour colour){
+    SDL_SetRenderDrawColor(renderer.sdl_renderer, colour.r, colour.g, colour.b, colour.a);
+    SDL_RenderDrawLine(renderer.sdl_renderer, x1, y1, x2, y2);
+}
+
 void Renderer::render_text(
     SDL_Renderer *renderer,
     int x, int y,

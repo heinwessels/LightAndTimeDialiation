@@ -62,3 +62,27 @@ double Body::get_density_based_on_mass_and_radius(double mass, double radius){
 double Body::get_radius_based_on_mass_and_density(double mass, double density){
     return pow(mass / (4.0 * M_PI / 3.0 * density), 1.0/3.0);
 }
+
+void Matter::add_pos_to_trail(){
+    trail.push_back(this->pos);
+}
+
+void Matter::draw(Renderer &renderer, Vec3<double> offset, double scale){
+
+    // First draw graphic
+    Vec3<double> pos_to_draw = (this->pos - offset) * scale;
+    this->graphic->draw(
+        renderer,
+        pos_to_draw.x,
+        pos_to_draw.y,
+        scale
+    );
+
+    // Now draw the trail behind the body
+    for (int i = 0; i < (int)trail.size() - 1; i++){
+        Vec3<double> pos1 = (trail[i] - offset) * scale;
+        Vec3<double> pos2 = (trail[i + 1] - offset) * scale;
+
+        renderer.draw_line(renderer, pos1.x, pos1.y, pos2.x, pos2.y, this->graphic->colour);
+    }
+}

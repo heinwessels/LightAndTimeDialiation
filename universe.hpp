@@ -24,8 +24,9 @@ class Universe{
         float ref_scale = 1;                        // in meter per pixel
         float zoom = 1;
         Observer(int screen_width, int screen_height) : screen_size (screen_width, screen_height, 0) {};
-        Vec3<double> get_screen_position(Vec3<double> uni_pos);
+        Vec3<double> get_screen_position_from_universe(Vec3<double> uni_pos);
         Vec3<double> get_universe_pos_from_screen(Vec3<double> screen_pos);
+        Vec3<double> get_universe_offset();
         double get_scale_factor(){return ref_scale * zoom;}
     };
     Observer observer;
@@ -38,6 +39,7 @@ class Universe{
     void add_matter(std::unique_ptr<Matter> matter);
 
     void clear_matter_outside_boundary(Vec3<double> mininum, Vec3<double> maximum);
+    void add_trail_to_matter();
 
     int get_num_of_matter(){return matter.size();}
     Matter * get_matter_at_pos(Vec3<double> at);
