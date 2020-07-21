@@ -40,6 +40,8 @@ void Template::sun_earth_moon(Universe &universe){
     universe.observer.speed = new Vec3<double>(0);
     // universe->observer.ref_scale = (double)renderer->screen_width / (384400000 * 3);
     universe.observer.ref_scale = (double)universe.observer.screen_size.x / (149598023000 * 2.5);
+
+    universe.set_trail_length(150);
 }
 
 
@@ -123,6 +125,9 @@ void Template::gas_cloud(Universe &universe){
     // Setup Observer
     universe.observer.speed = new Vec3<double>(0);
     universe.observer.ref_scale = (double)universe.observer.screen_size.x / (x_end - x_start);
+
+    universe.set_trail_length(50);
+
 }
 
 void Template::three_body_figure_eight(Universe &universe){
@@ -163,6 +168,8 @@ void Template::three_body_figure_eight(Universe &universe){
     universe.observer.ref_scale = (double)universe.observer.screen_size.x / 3;
     universe.observer.simulation_speed = 1;
     universe.observer.time_step_max = 1e-6;
+
+    universe.set_trail_length(70);
 }
 
 void Template::three_body_random_dance(Universe &universe){

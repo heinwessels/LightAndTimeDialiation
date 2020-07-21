@@ -46,9 +46,21 @@ std::unique_ptr<Matter> Body::combine_with(Matter * other){
         );
 
 
-        return std::make_unique<Body>(
+        auto new_body = std::make_unique<Body>(
             new_mass, new_pos, new_speed, new_radius
         );
+
+        // Copy the trail from the largest body (in mass)
+        if(this->mass > other->mass){
+            new_body->set_trail_length(this->trail.capacity()); // Update the trail length
+            new_body->copy_trail_from(this->trail);
+        }
+        else{
+            new_body->set_trail_length(other->trail.capacity()); // Update the trail length
+            new_body->copy_trail_from(other->trail);
+        }
+
+        return std::move(new_body);
     }
     else{
         // Don't know how to handle this collision
@@ -65,6 +77,12 @@ double Body::get_radius_based_on_mass_and_density(double mass, double density){
 
 void Matter::add_pos_to_trail(){
     trail.push_back(this->pos);
+}
+
+void Matter::copy_trail_from(boost::circular_buffer<Vec3<double>> other){
+    for (auto & t : other){
+        this->trail.push_back(t);
+    }
 }
 
 void Matter::draw(Renderer &renderer, Vec3<double> offset, double scale){

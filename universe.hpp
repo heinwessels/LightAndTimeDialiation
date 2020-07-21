@@ -39,6 +39,8 @@ class Universe{
     void add_matter(std::unique_ptr<Matter> matter);
 
     void clear_matter_outside_boundary(Vec3<double> mininum, Vec3<double> maximum);
+
+    void set_trail_length(int length);
     void add_trail_to_matter();
 
     int get_num_of_matter(){return matter.size();}

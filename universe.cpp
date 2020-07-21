@@ -108,6 +108,11 @@ void Universe::draw(){
     }
 }
 
+void Universe::set_trail_length(int length){
+    for (auto & m : matter){
+        m->set_trail_length(length);
+    }
+}
 void Universe::add_trail_to_matter(){
     for (auto & m : matter){
         m->add_pos_to_trail();
