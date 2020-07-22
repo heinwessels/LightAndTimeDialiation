@@ -46,7 +46,7 @@ void Renderer::draw_filled_circle(Renderer &renderer, float x, float y, float ra
         {
             int dx = radius - w; // horizontal offset
             int dy = radius - h; // vertical offset
-            if ((dx*dx + dy*dy) <= (radius * radius))
+            if ((dx*dx + dy*dy) < (radius * radius))
             {
                 SDL_RenderDrawPoint(renderer.sdl_renderer, x + dx, y + dy);
             }

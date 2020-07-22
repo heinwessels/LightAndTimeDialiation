@@ -47,8 +47,7 @@ void Template::sun_earth_moon(Universe &universe){
 
 void Template::gas_cloud(Universe &universe){
 
-    // uint32_t gseed = 555;   // Creates cool close orbit
-    uint32_t gseed = 5225;
+    uint32_t gseed = 5255;
 
     double density = 5500;  // Density of earth [kg/m^3]
 
@@ -66,7 +65,7 @@ void Template::gas_cloud(Universe &universe){
 	// std::cout << "---------------------------------\n";
     // perlin.accumulatedOctaveNoise2D_0_1(x / fx, y / fy, octaves)
 
-    double size_frequency = 3;
+    double size_frequency = 6;
     double size_octaves = 4;
     const siv::PerlinNoise size_perlin(gseed);
     const double size_fx = scale / size_frequency;
@@ -78,10 +77,10 @@ void Template::gas_cloud(Universe &universe){
     const double speed_fx = scale / speed_frequency;
     const double speed_fy = scale / speed_frequency;
 
-    double minimim_mass = 1e15;
+    double minimim_mass = 1e10;
     double maximum_mass = 5e25;
     double spacing_multiplier = 5e0;
-    double speed_multiplier = 4e5;
+    double speed_multiplier = 5e5;
 
     double x = x_start, y = y_start;
     double max_radius = 0;
@@ -125,9 +124,9 @@ void Template::gas_cloud(Universe &universe){
     // Setup Observer
     universe.observer.speed = new Vec3<double>(0);
     universe.observer.ref_scale = (double)universe.observer.screen_size.x / (x_end - x_start);
+    universe.observer.simulation_speed = 60*60;
 
-    universe.set_trail_length(50);
-
+    universe.set_trail_length(70);
 }
 
 void Template::three_body_figure_eight(Universe &universe){
@@ -165,7 +164,7 @@ void Template::three_body_figure_eight(Universe &universe){
     ));
 
     universe.observer.speed = new Vec3<double>(0);
-    universe.observer.ref_scale = (double)universe.observer.screen_size.x / 3;
+    universe.observer.ref_scale = (double)universe.observer.screen_size.x / 2.5;
     universe.observer.simulation_speed = 1;
     universe.observer.time_step_max = 1e-6;
 

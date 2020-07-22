@@ -12,8 +12,8 @@ void Controller::init(){
 
     // Choose from templates
     // Template::sun_earth_moon(*universe);
-    Template::gas_cloud(*universe);
-    // Template::three_body_figure_eight(*universe);
+    // Template::gas_cloud(*universe);
+    Template::three_body_figure_eight(*universe);
     // Template::three_body_random_dance(*universe);
 }
 

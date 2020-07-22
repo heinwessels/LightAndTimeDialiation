@@ -26,7 +26,7 @@ private:
 
     static constexpr double fps_limit = 30.0;
 
-    bool hide_ui = false;
+    bool hide_ui = true;
     bool fixed_step = false;
     bool record = false;
 
