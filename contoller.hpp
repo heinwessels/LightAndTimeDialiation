@@ -24,14 +24,14 @@ public:
     ~Controller(){};
 private:
 
-    static constexpr double fps_limit = 30.0;
+    static constexpr double fps_limit = 10.0;
 
-    bool hide_ui = true;
+    bool hide_ui = false;
     bool fixed_step = false;
     bool record = false;
 
     enum State {idle, running, single_step, exit};
-    State state = running;
+    State state = idle;
 
     std::unique_ptr<Renderer> renderer;
     std::unique_ptr<Universe> universe;

@@ -47,7 +47,7 @@ void Template::sun_earth_moon(Universe &universe){
 
 void Template::gas_cloud(Universe &universe){
 
-    uint32_t gseed = 5255;
+    uint32_t gseed = 53;
 
     double density = 5500;  // Density of earth [kg/m^3]
 
