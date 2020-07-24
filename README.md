@@ -1,4 +1,4 @@
-# LightAndTimeDialiation
+# Universe (Gravity) Simulation
 This project will be a *very* simplified simulation of the creation of a galaxy or solar system from a gas cloud. However, the **goal** is to learn more about C++ and OOP best practices by rewriting a previous project called [UniverseSimulation](https://github.com/heinwessels/UniverseSimulator). The idea is to over-design everything to force the use of best practices that will typically be used for large commercial projects.
 
 Below is an example of the implemented gravity simulation:
@@ -41,7 +41,7 @@ I designed the class structure using a UML diagram using LucidChart. I favoured 
 ### Figure Eight Orbit
 Below is an example showing a specific gravity simulation called **The Figure Eight Solution**. It shows a special case where the three-body-problem has an analytical solution, which means the three bodies are in a periodic orbit. This is a normal gravity simulation, but notice how in sync the bodies is. Typically 3 bodies orbiting around each other is very chaotic and unpredictable.
 
-To truly understand the *perfection* of this famous orbit its worth knowing that it was only discovered in *1993*. To put this in perspective, Isaac Netwon derived the gravity equation in *1687*, which is all this simulation uses. That's a 300 year gap, in which humans found black holes, determined the universe is expanding, invented General Relativity, sent a satellite to sling by 4 different planets without crashing and escape our solar system, and landed people on the moon! And only after all that did we find this beautiful stable 3 body orbit.
+To truly understand the *perfection* of this famous orbit its worth knowing that it was only discovered in *1993*. To put this in perspective, Isaac Netwon derived the gravity equation in *1687*, which is all this simulation uses. That's a 300 year gap, in which humans discovered black holes, determined the universe is expanding, founded General Relativity, sent satellites to sling by 4 different planets without crashing and escape our solar system, and landed people on the moon  multiple times! And only after all that did we find this beautiful stable 3 body orbit.
 
 ![](gifs/figure_eight_clean.gif)
 
