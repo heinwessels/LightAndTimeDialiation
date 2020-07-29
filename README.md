@@ -20,6 +20,8 @@ I designed the class structure using a UML diagram using LucidChart. I favoured 
 
 **Note:** This UML diagram is slightly out of date. The basic layout is still the same, although it has grown a few more functions. Also, it still shows the `Photon` derived object which is from when this project was meant to simulate general relativity. I figured out most of the equations I needed, but couldn't figure out how much light should bend when experiencing gravity from `n` bodies. So I changed the focus to simply be a improved gravity simulation.
 
+**Another Note:** After I completed this project I realized the foundation of the system is still using inheretance and not composition, where `Body` `is-a` `Matter`.
+
 ## Lessons Learned
 - Having raw arrays of polymorphism objects is **really bad**, because it will cause slicing. The solution is to use a array of pointers, or even better, `std:unique_ptr`. This will ensure uncompromised memory, and no accidental memory leaks if used correctly. However, rather storing pointers is bad for caching, since the objects won't neccesarily be sequential in memory, but this is an optimization problem, and negligible in our case.
 - There's little reason to use raw arrays. A container, e.g. `std::vector`, is just as efficient if used correctly, and has some powerful capabilities.
